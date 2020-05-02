@@ -1,0 +1,2 @@
+"0","ggplot(wtloss, aes(x = selfeff, y = caldef)) + geom_point() +"
+"0","geom_smooth(method = ""lm"")"

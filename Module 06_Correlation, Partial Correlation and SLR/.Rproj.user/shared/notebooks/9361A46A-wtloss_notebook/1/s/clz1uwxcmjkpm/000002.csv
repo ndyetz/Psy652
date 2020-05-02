@@ -1,0 +1,9 @@
+"0","wtloss <- read_csv(""wtloss.csv"")"
+"2","Parsed with column specification:
+cols(
+  lbslost = [32mcol_double()[39m,
+  caldef = [32mcol_double()[39m,
+  selfeff = [32mcol_double()[39m,
+  id = [32mcol_double()[39m
+)
+"

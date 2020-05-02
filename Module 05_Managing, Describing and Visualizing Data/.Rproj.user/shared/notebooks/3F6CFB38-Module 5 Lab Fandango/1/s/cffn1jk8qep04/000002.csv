@@ -1,0 +1,4 @@
+"0","```r
+film_2014 <- filter(fandango, year==2014)
+film_2014 <- filter(fandango, year==2014 & stars >=4)
+```"

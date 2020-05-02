@@ -1,0 +1,13 @@
+"0","bac <- read_csv(""bac_obs.csv"")"
+"2","Parsed with column specification:
+cols(
+  id = [32mcol_double()[39m,
+  weight = [32mcol_double()[39m,
+  typ_drks = [32mcol_double()[39m,
+  alcexp = [32mcol_double()[39m,
+  pmood = [32mcol_double()[39m,
+  absorb = [32mcol_double()[39m,
+  alc_gm = [32mcol_double()[39m,
+  bac = [32mcol_double()[39m
+)
+"

@@ -1,0 +1,13 @@
+"0","```r
+anova(mod1, mod2, test = \"F\")
+```"
+"1","Analysis of Variance Table
+
+Model 1: bac100 ~ alcexp_m + typ_drks_m
+Model 2: bac100 ~ alcexp_m + typ_drks_m + absorb_m + weight_m + alc_gm_m
+  Res.Df    RSS Df Sum of Sq      F    Pr(>F)    
+1    197 496.38                                  
+2    194  71.45  3    424.92 384.57 < 2.2e-16 ***
+---
+Signif. codes:  0 â€˜***â€™ 0.001 â€˜**â€™ 0.01 â€˜*â€™ 0.05 â€˜.â€™ 0.1 â€˜ â€™ 1
+"

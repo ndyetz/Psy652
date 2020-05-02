@@ -1,0 +1,70 @@
+---
+title: "Iris data exploration"
+subtitle: Your Name
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  html_notebook:
+    toc: yes
+---
+
+
+# Load Packages
+```{r, message = FALSE}
+
+library(tidyverse)
+library(psych)
+
+```
+
+
+# Import Data
+```{r, message = FALSE}
+
+
+#I am going to import the data into R
+iris_data <- read_csv("iris.csv")
+
+
+```
+
+# See the structure of the data frame
+```{r}
+glimpse(iris_data)
+```
+
+
+
+# Examine descriptives using the summary function
+```{r}
+
+summary(iris_data)
+
+
+
+```
+
+
+# Examine descriptives using the describe function
+```{r}
+describe(iris_data)
+```
+
+
+
+# Creation of plots
+## Exploration of histograms
+### Two simple plots
+```{r}
+
+ggplot(data = iris_data, aes(x = Sepal.Length)) +
+  geom_histogram(binwidth = .1)
+
+ggplot(data = iris_data, aes(x = Sepal.Length)) +
+  geom_histogram(binwidth = .5)
+
+
+```
+
+

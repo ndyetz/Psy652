@@ -1,0 +1,16 @@
+"0","```r
+str(fandango)
+```"
+"1","Classes â€˜spec_tbl_dfâ€™, â€˜tbl_dfâ€™, â€˜tblâ€™ and 'data.frame':	1022 obs. of  4 variables:
+ $ film   : chr  \"Avengers: Age of Ultron\" \"Cinderella\" \"Ant-Man\" \"Do You Believe?\" ...
+ $ year   : num  2015 2015 2015 2015 2015 ...
+ $ stars  : num  3.5 4.5 4 1 0.5 3 2 4.5 5 4.5 ...
+ $ website: chr  \"Rotten Tomatoes\" \"Rotten Tomatoes\" \"Rotten Tomatoes\" \"Rotten Tomatoes\" ...
+ - attr(*, \"spec\")=
+  .. cols(
+  ..   film = [31mcol_character()[39m,
+  ..   year = [32mcol_double()[39m,
+  ..   stars = [32mcol_double()[39m,
+  ..   website = [31mcol_character()[39m
+  .. )
+"

@@ -1,0 +1,13 @@
+"0","```r
+pred1_exp <- data_grid(bac_exp,
+  alcexp_m = seq_range(alc_gm, 10),
+  typ_drks_m = c(-14.67, 0, 14.67)) %>%
+mutate(typ_drks_m.f = factor(typ_drks_m,
+  levels = c(-14.67, 0, 14.67),
+    labels = c(\"1 SD Below Mean\", \"Mean\", \"1 SD Above Mean\")))
+pred2 <- predict(m3, pred1, interval = \"confidence\") %>%
+  as_data_frame()
+```"
+"1","Error in predict.lm(m3, pred1, interval = \"confidence\") : 
+  object 'pred1' not found
+"

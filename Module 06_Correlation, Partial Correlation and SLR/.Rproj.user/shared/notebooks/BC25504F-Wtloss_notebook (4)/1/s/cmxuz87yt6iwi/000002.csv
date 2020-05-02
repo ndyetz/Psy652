@@ -1,0 +1,44 @@
+"0","library(ppcor)"
+"2","Loading required package: MASS
+"
+"0","library(psych)"
+"0","library(olsrr)"
+"2","Registered S3 method overwritten by 'data.table':
+  method           from
+  print.data.table     
+"
+"2","Registered S3 method overwritten by 'dplyr':
+  method           from
+  print.rowwise_df     
+"
+"2","Registered S3 methods overwritten by 'htmltools':
+  method               from         
+  print.html           tools:rstudio
+  print.shiny.tag      tools:rstudio
+  print.shiny.tag.list tools:rstudio
+"
+"2","
+Attaching package: ‘olsrr’
+
+"
+"2","The following object is masked from ‘package:MASS’:
+
+    cement
+
+"
+"2","The following object is masked from ‘package:datasets’:
+
+    rivers
+
+"
+"0","library(apaTables)"
+"0","library(tidyverse)"
+"2","[30m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.2.1 --[39m
+"
+"2","[30m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
+[31mx[30m [34mggplot2[30m::[32m%+%()[30m   masks [34mpsych[30m::%+%()
+[31mx[30m [34mggplot2[30m::[32malpha()[30m masks [34mpsych[30m::alpha()
+[31mx[30m [34mdplyr[30m::[32mfilter()[30m  masks [34mstats[30m::filter()
+[31mx[30m [34mdplyr[30m::[32mlag()[30m     masks [34mstats[30m::lag()
+[31mx[30m [34mdplyr[30m::[32mselect()[30m  masks [34mMASS[30m::select()[39m
+"

@@ -1,0 +1,43 @@
+"0","```r
+# bac is a very small number -- we will multiply it by 100 so it's easier to read the output,
+# we will also center all of the predictors at the mean
+obs <- obs %>%
+mutate(bac100 = bac*100,
+alc_gm_m = alc_gm - mean(alc_gm),
+weight_m = weight - mean(weight),
+absorb_m = absorb - mean(absorb),
+alcexp_m = alcexp - mean(alcexp),
+typ_drks_m = typ_drks - mean(typ_drks))
+mod1 <- lm(data = obs, bac100 ~ alcexp_m + typ_drks_m)
+ols_regress(mod1)
+```"
+"1","                        Model Summary                          
+--------------------------------------------------------------
+R                       0.683       RMSE                1.587 
+R-Squared               0.467       Coef. Var          19.158 
+Adj. R-Squared          0.461       MSE                 2.520 
+Pred R-Squared          0.449       MAE                 1.277 
+--------------------------------------------------------------
+ RMSE: Root Mean Square Error 
+ MSE: Mean Square Error 
+ MAE: Mean Absolute Error 
+
+                               ANOVA                                 
+--------------------------------------------------------------------
+               Sum of                                               
+              Squares         DF    Mean Square      F         Sig. 
+--------------------------------------------------------------------
+Regression    434.411          2        217.205    86.204    0.0000 
+Residual      496.377        197          2.520                     
+Total         930.788        199                                    
+--------------------------------------------------------------------
+
+                                 Parameter Estimates                                  
+-------------------------------------------------------------------------------------
+      model     Beta    Std. Error    Std. Beta      t        Sig     lower    upper 
+-------------------------------------------------------------------------------------
+(Intercept)    8.286         0.112                 73.818    0.000    8.064    8.507 
+   alcexp_m    0.907         0.177        0.327     5.119    0.000    0.557    1.256 
+ typ_drks_m    0.065         0.009        0.440     6.886    0.000    0.046    0.083 
+-------------------------------------------------------------------------------------
+"

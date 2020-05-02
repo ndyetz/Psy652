@@ -1,0 +1,2 @@
+"0","##Via Base R's boxplot function"
+"0","boxplot(wtloss$lbslost)"

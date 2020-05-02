@@ -1,0 +1,2 @@
+"0","bac_subset <- select(bac, bac100, alc_gm, weight)"
+"0","cor_matrix <- cor(bac_subset)"

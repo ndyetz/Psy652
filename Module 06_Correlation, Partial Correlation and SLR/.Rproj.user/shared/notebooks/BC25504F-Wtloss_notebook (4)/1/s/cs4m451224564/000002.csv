@@ -1,0 +1,2 @@
+"0","##Via Base R's plot function"
+"0","plot(wtloss[ , c(""lbslost"", ""caldef"", ""selfeff"")])"

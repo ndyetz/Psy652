@@ -1,0 +1,86 @@
+---
+title: "Module 11 lab"
+subtitle: Gemma Wallace & Neil Yetz
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  html_notebook:
+    toc: yes
+---
+
+# Load libraries
+```{r, message = FALSE}
+library(tidyverse)
+library(psych)
+```
+
+# Import data
+```{r,message=FALSE}
+stress <- read_csv("StressReduction.csv")
+```
+
+# Factor the grouping variable
+```{r}
+stress <- stress %>% mutate(ProgramCode.f = factor(ProgramCode, levels = c(0,1,2,3),labels = c("None", "Healthy Habits", "Get Movin", "Recharge")))
+```
+
+
+# Get descriptives
+```{r, warning = FALSE}
+describe(stress$StressLevel)
+mean(stress$StressLevel)
+aggregate(x=stress$StressLevel, by=list(stress$ProgramCode.f), FUN=mean)
+```
+The mean stress level for each of the four groups are all different from the grand mean (5.475), indicating that stress level varied across groups. The mean stress level for the "none" (i.e., no treatment) group was highest (6.333), while the mean stress level for the Get Movin treatment group was lowest (4.533).
+
+# Create boxplots of StressLevel across treatment groups
+```{r}
+ggplot(stress, aes(y = StressLevel, group = ProgramCode.f, color = ProgramCode.f)) +
+  geom_boxplot() 
+```
+This plot shows how the dependent variable, stres level, varied across the four program groups. The Get Movin group had the lowest maximum, minimum, and median stress levels. Interestingly, the upper quartile for the Healthy Habits group was similar to those for the other two treatments, but this group had a larger maximum stress level and larger lower quartile than the Get Movin and Reharge groups. The boxplot indicates that there weren't outliers in these data.
+
+# Conduct an ANOVA
+```{r}
+lm1 <- lm(StressLevel ~ ProgramCode.f, data = stress)
+anova(lm1)
+```
+## Obtain eta squared
+```{r}
+54.83 / (54.83 + 595.10)
+```
+
+The p-value for the model F-test is significant at p<0.05, indicating that there was a significant effect of program on stress level.
+The df-error for this model is 116 (df-err = N-k).
+The df-hyp for this model is 3 (df-hyp = k-1).
+The eta squared for the model was 0.084, indicating that the program variable exlained 8.4% of the total variability in stress level. Therefore, 91.6% of the total variability in stress level was due to things other than the program variable.
+
+# Conduct planned contrasts
+## Create contrasts
+```{r}
+c1 <- c(-1, 1, 0, 0)
+c2 <- c(-1, 0, 1, 0)
+c3 <- c(-1, 0, 0, 1)
+```
+
+## Bind contrasts to predictor variable 
+```{r}
+contrasts(stress$ProgramCode.f) <-  cbind(c1,c2, c3)
+#View the contrasts (At the bottom of the output)
+stress$ProgramCode.f
+```
+
+# Run ANOVA with contrasts
+```{r}
+lm_contrast <- lm(StressLevel ~ ProgramCode.f, data = stress)
+summary.lm(lm_contrast)
+```
+
+The model intercept, 5.475, represents the grand mean of the dependent variable (stress level).
+
+The planned contrasts revealed that the Get Movin group had significantly lower stress levels compared to the None group (t(116) = -2.629, p <0.005 (one-tailed)). The planned constrasts revealed that stress level did not significantly differ between the Healthy Habits and None groups (t(116) = 1.001, p>0.05), or between the Recharge and None groups (t(116) = -0.768, p>0.05).
+
+Remember to divide the p value by two when interpreting these effects! The model is two-tailed by default, but planned contrasts are interpreted as one-tailed.
+
+Planned contrasts are done when you have specific hypotheses that you want to test about relations between certain groups of a predictor variable and the outcome variable. You would use a post-hoc analysis if you didn't have specific hypotheses about differences between groups.

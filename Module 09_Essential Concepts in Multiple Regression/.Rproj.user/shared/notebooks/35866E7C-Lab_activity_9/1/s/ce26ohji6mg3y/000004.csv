@@ -1,0 +1,4 @@
+"0","scatterplot2 <- ggpairs(bac, columns = c(""bac100"", ""pmood"", ""typ_drks"", ""weight"", ""alc_gm""),"
+"0","upper = list(continuous = wrap(""cor"", size=5)),"
+"0","title = ""Bivariate Relationship of Key Variables"", progress = ggmatrix_progress(clear = TRUE))"
+"0","print(scatterplot2)"

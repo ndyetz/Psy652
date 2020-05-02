@@ -1,0 +1,6 @@
+"0","```r
+predict(m6, data.frame(weight=70, alc_gm=40))
+```"
+"1","       1 
+6.604938 
+"

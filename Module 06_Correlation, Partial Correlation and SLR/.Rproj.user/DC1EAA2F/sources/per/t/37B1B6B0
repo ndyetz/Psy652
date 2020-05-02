@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571189157872.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "37B1B6B0",
+    "lastKnownWriteTime" : 7310030967368871009,
+    "last_content_update" : 1571189157872,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "E86D8309",
+        "caption" : "wtloss",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=wtloss&cache_key=E86D8309",
+        "displayedObservations" : 100,
+        "environment" : "",
+        "object" : "wtloss",
+        "preview" : 0,
+        "totalObservations" : 100,
+        "variables" : 4
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

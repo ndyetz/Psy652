@@ -1,0 +1,5 @@
+"0","```r
+cor(obs1$resid_ry, obs1$resid_rx) #Note this is is the partial correlation
+```"
+"1","[1] 0.2916431
+"

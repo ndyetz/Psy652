@@ -1,0 +1,10 @@
+"0","```r
+# step 1 - regress alc_gm (y) on variable(s) we want to partial out (typ_drks)
+ry <- lm(data = obs, alc_gm ~ typ_drks) 
+# step 2 - regress alcexp (key predictor) on variable(s) we want to partial out (typ_drks)
+rx <- lm(data = obs, alcexp ~ typ_drks)
+# gather residuals from step 1 and 2, and add them to our dataset
+obs1 <- obs %>%
+  add_residuals(ry, var = \"resid_ry\") %>%
+  add_residuals(rx, var = \"resid_rx\") #add_residuals is a command. \"resid_ry\" and resid_rx\" is what we are naming our residuals variable in our new dataset (They are now saved in obs1 dataset)
+```"

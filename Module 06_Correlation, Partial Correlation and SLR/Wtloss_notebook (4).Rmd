@@ -1,0 +1,112 @@
+---
+title: "Wtloss_notebook"
+author: "Jordan Thomas"
+output:
+  html_document:
+    df_print: paged
+---
+
+#Load Libraries
+```{r, warning=FALSE}
+library(ppcor)
+library(psych)
+library(olsrr)
+library(apaTables)
+library(tidyverse)
+```
+
+#Import Data
+```{r}
+wtlossa <- read_csv("wtloss_parta.csv")
+wtlossb = read_csv("wtloss_partb.csv")
+```
+
+#Merge Data
+```{r}
+wtloss = merge.data.frame(wtlossa, wtlossb)
+```
+
+#Describe Data
+##Via base R's summary function
+```{r}
+summary(wtloss)
+```
+
+##Via describe function
+```{r}
+describe(wtloss)
+```
+
+#Check for outliers
+```{r}
+##Via Base R's boxplot function
+boxplot(wtloss$lbslost)
+##Via ggplot2's ggplot function
+ggplot(wtloss, aes(y = lbslost)) + geom_boxplot()
+```
+Based on the boxplots above, it appears that there is one outlier.
+
+#Plot relationships between variables
+```{r}
+##Via Base R's plot function
+plot(wtloss[ , c("lbslost", "caldef", "selfeff")])
+```
+
+```{r}
+##Via ggplot2's ggplot function
+ggplot(wtloss, aes(x = lbslost, y = caldef)) + geom_point() +
+geom_smooth(method = "lm")
+
+ggplot(wtloss, aes(x = lbslost, y = selfeff)) + geom_point() +
+geom_smooth(method = "lm")
+
+ggplot(wtloss, aes(x = selfeff, y = caldef)) + geom_point() +
+geom_smooth(method = "lm")
+```
+
+#Correlations
+##Pearson's Correlation Matrices
+```{r}
+###Via base R's cor function
+cor(wtloss)
+```
+
+```{r}
+###Via apaTables' apa cor.table function
+apa.cor.table(wtloss, "Weight Loss Table.doc", show.conf.interval = TRUE)
+```
+
+There is a strong positive correlation between the amount of pounds lost and calorie deficit (r = .72, p < .01). There is also a strong positive correlation between self-efficacy and and pounds lost (r = .54, p < .01). Additionally, there is a strong positive correlation between calorie deficit and self-efficacy (r = .59, p < .01).
+
+#Get Partial Correlation
+```{r}
+attach(wtloss)
+pcor.test(x = lbslost, y = caldef, z = selfeff)
+```
+
+The results of the partial correlation indicate that pounds lost has a strong, positive correlation to calorie deficit (r = .59, p < .001), even when controlling for self-efficacy.
+
+#Get Semipartial Correlation
+```{r}
+spcor.test(lbslost, caldef, selfeff)
+```
+
+The results of the semi-partial correlation shows that pounds lost and calorie deficit have a strong, positive relation (r = .5, p < .001), even when controlling for self-efficacy.
+
+#Fit a Simple Linear Regression (SLR) Model
+```{r}
+mod1 = lm(lbslost ~ caldef, data = wtloss)
+```
+
+##Display SLR Model Results
+```{r}
+###Via base R's summary function
+summary(mod1)
+```
+
+```{r}
+###Via olsrr's ols_regress function
+ols_regress(mod1)
+```
+
+The y-intercept for the model is -.12. The unstandardized beta coefficient for caldef is .29. The standard error of caldef is .03. The results indicate there was a significant relation between caldef and lbslost (b = .29, p < .001). Overall, the caldef was able to account for a significant amount of variance in lbslost (R^2 = .52, p < .001).

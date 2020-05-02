@@ -1,0 +1,147 @@
+---
+title: "Wtloss notebook"
+output:
+  html_document:
+    toc: true
+---
+Module 6 Lab Activity for PSY 652
+
+# Load Libraries
+```{r,message=FALSE}
+library(ppcor)
+library(psych)
+library(tidyverse)
+library(olsrr)
+library(apaTables)
+```
+
+# Import data
+```{r, message=FALSE}
+wtlossa <- read_csv("wtloss_parta.csv")
+wtlossb <- read_csv("wtloss_partb.csv")
+```
+
+# Merge data
+```{r}
+wtloss<-merge(x=wtlossa, y=wtlossb,by="id")
+```
+
+
+# Describe Data
+## Via base R's summary function
+```{r}
+summary(wtloss)
+```
+
+## Via psych's describe function
+```{r}
+describe(wtloss)
+```
+
+# Look for outliers with boxplots
+## Via Base R's boxplot function
+```{r}
+boxplot(wtloss$lbslost)
+```
+
+## Via ggplot2's ggplot function
+```{r}
+ggplot(wtloss, aes(y = lbslost)) +
+  geom_boxplot()
+```
+
+The boxplot indicates that there is one outlier for lbslost, with a value of -4. This indicates that one participant gained 4 pounds during the course of this study.
+
+# Plot relationships between variables
+## Via Base R's plot function
+```{r}
+attach(wtloss)
+plot(lbslost, caldef )
+plot(lbslost, selfeff)
+plot(caldef , selfeff)
+detach(wtloss)
+```
+
+## Via ggplot2's ggplot function
+```{r}
+ggplot(wtloss, aes(x = caldef, y = lbslost)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+ggplot(wtloss, aes(x = lbslost, y = selfeff)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+ggplot(wtloss, aes(x = caldef, y = selfeff)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+# Correlations
+## Pearson's Correlations Matrices
+### Via Base R's cor function
+```{r}
+cor(wtloss)
+```
+
+
+### Via apaTables' apa.cor.table function
+```{r}
+apa.cor.table(wtloss, "wtloss correlations.doc", show.conf.interval = TRUE)
+```
+
+Correlation coefficients measure the direction and strength of the tendnecy for two variables to vary together. Correlation coefficients do not apply causation.
+
+The correlation coefficient between lbslos and caldef is .72, and this is significant at p<0.01. Thus, there is a strong, positive (uphill) correlation between lbslost and caldef.
+
+The correlation coefficient between lbslost and selfeff is .54, and this is significant at p<0.01. Thus, there is a strong, positive (uphill) correlation between lbslost and selfeff. 
+
+The correlation between caldef and selfeff is .59, and this is significant at p<0.01. Thus, there is a strong, positive (uphill) correlation between caldef and selfeff.
+
+The correlation between lbslost and caldef is larger than the correlations between lbslost and selfeff and between caldef and selfeff.
+
+
+## Get partial correlation
+```{r}
+attach(wtloss)
+pcor.test(lbslost, caldef, selfeff)
+detach(wtloss)
+```
+
+Partial correlation first removes from both the outcome (lbslost) and predictor (caldef) all variance which may be accounted for by a third variable (in this case selfeff). Then it correlates the remaining variance of caldef with the remaining variance of lbslost. Here, the partial correlation between lbslost and caldef is .593 and this is significant at p<0.01. Thus, there is still a strong, positive (uphill) correlation between lbslost and caldef when controlling for or holding constant the effects of selfeff. This correlation is smaller than when the effects of selfeff were not removed (.593 compared to 0.722).
+
+## Get semipartial correlation
+```{r}
+attach(wtloss)
+spcor.test(lbslost, caldef, selfeff)
+detach(wtloss)
+```
+
+Semi-partial correlation first removes from the predictor (caldef) all variance which may be accounted for by the other predictors (in this case selfeff). Then it correlates the remaining variance of the predictor (caldef) with y (lbslost). Here the semi-partial correlation between caldef and lbslost is .498, and this is significant at p<0.01. Thus, there is still a positive (uphill) relationship between lbs and caldef, but this correlation is smaller (now moderately strong; 0.498 compared to 0.722) than when the effects of selfeff on caldef were not controlled for.
+
+Note: the semi-partial correlation is often considered to be a better indicator of the "actual relevance" of a predictor, because it is scaled relative the total variability of the outcome variable. The squared semi-partial correlation will give you the proportion of unique variance accounted for by the predictor, relative to the total variance of Y. This is a key concept in Multiple Linear Regression models.
+
+# Fit a Simple Linear Regression (SLR) Model
+```{r}
+mod1 <- lm(lbslost ~ caldef, data = wtloss)
+```
+
+## Display SLR model results
+### Via base R's summary function
+```{r}
+summary(mod1)
+```
+
+
+### Via olsrr's ols_regress function
+```{r}
+ols_regress(mod1)
+```
+
+The intercept represents the value of y when x = 0. Here, the intercept for caldef is -0.121, indicating that lbslost = -0.121 when caldef = 0.
+
+The beta for a predictor represents the expected change in y for a 1-unit increase in x. Here, the beta for caldef is 0.295, indicating that lbslost is expected to increase by 0.295 for every 1-unit increase in caldef. The standard error for this estimate is 0.029, indicating that the average distance that the observed values fall from the predicted regression line is 0.029. The upper and lower confidence intervals for this value indicate that there is a 95% liklihood that the true value for this beta estimate falls between 0.238 and 0.351. Because the 95% confidence interval for the estimate does not include zero, and becuase p < .001, this effect is significant.
+
+The model R^2 value represents the proportion of variability in y that the model explains. 
+Here, the model R^2 is 0.521, indicating that the predictor (caldef) explains 52.1% of the variability in lbslost.
+

@@ -1,0 +1,29 @@
+"0","```r
+# observational dataset
+cor(obs1$resid_ry, obs1$resid_rx) #partial correlation (residuals of x and y)
+```"
+"1","[1] 0.2916431
+"
+"0","```r
+cor(obs1$alc_gm, obs1$resid_rx)   #semi-partial correlation (residuals of x but NOT y)
+```"
+"1","[1] 0.2146688
+"
+"0","```r
+ols_correlations(m3)
+```"
+"1","                Correlations                 
+--------------------------------------------
+Variable      Zero Order    Partial    Part  
+--------------------------------------------
+typ_drks_m         0.677      0.519    0.427 
+alcexp_m           0.567      0.292    0.215 
+--------------------------------------------
+"
+"0","```r
+ols_correlations(m3)^2
+```"
+"1","           Zero-order    Partial       Part
+typ_drks_m  0.4582054 0.26908172 0.18249236
+alcexp_m    0.3217958 0.08505568 0.04608271
+"

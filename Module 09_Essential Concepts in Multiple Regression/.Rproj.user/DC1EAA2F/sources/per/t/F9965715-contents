@@ -1,0 +1,473 @@
+---
+title: "R Notebook for BAC Data"
+output:
+  html_notebook:
+    toc: yes
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+#Remove all objects 
+```{r}
+rm(list=ls(all=TRUE)) 
+```
+
+
+#Load libraries
+```{r, message = FALSE}
+
+
+#install.packages("huxtable")
+#install.packages("olsrr")
+#install.packages("GGally")
+#install.packages("psych")
+#install.packages("modelr")
+#install.packages("tidyverse")
+install.packages("crayon")
+
+
+
+library("huxtable")
+library("olsrr")
+library("GGally")
+library("psych")
+library("modelr")
+library("tidyverse")
+library(crayon)
+```
+
+
+
+#Load in datasets
+```{r, message = FALSE}
+
+obs <- read_csv("bac_obs.csv")
+exper <- read_csv("bac_exp.csv")
+
+```
+
+
+
+#study & variable description
+
+<center>
+![](C:\Users\Neil\Desktop\Class folder\Fall 2017\RM\Analyses\MyClassActivities\BAC_desc.PNG)
+</center>
+
+
+
+#Explore the BAC observational study data
+## get descriptive statistics
+
+```{r}
+describe(obs)
+
+
+```
+
+
+##Create a scatterplot matric
+```{r}
+scatterplot <- ggpairs(obs, columns = c("typ_drks", "alcexp", "alc_gm"),
+upper = list(continuous = wrap("cor", size=3)),
+title = "Bivariate Relationship of Key Variables")
+print(scatterplot, progress=FALSE )
+
+```
+
+
+
+#Explore the meaning of partial coefficients
+## Obtain necessary residuals
+```{r}
+# step 1 - regress alc_gm (y) on variable(s) we want to partial out (typ_drks)
+ry <- lm(data = obs, alc_gm ~ typ_drks) 
+# step 2 - regress alcexp (key predictor) on variable(s) we want to partial out (typ_drks)
+rx <- lm(data = obs, alcexp ~ typ_drks)
+# gather residuals from step 1 and 2, and add them to our dataset
+obs1 <- obs %>%
+  add_residuals(ry, var = "resid_ry") %>%
+  add_residuals(rx, var = "resid_rx") #add_residuals is a command. "resid_ry" and resid_rx" is what we are naming our residuals variable in our new dataset (They are now saved in obs1 dataset)
+```
+
+
+
+##plot the residuals
+```{r}
+# step 3 - plot residual from step 1 (on y) and residual from step 2 (on x) on a scatterplot
+ggplot(data=obs1, aes(x = resid_rx, y = resid_ry)) +
+geom_point() +
+geom_smooth(method = "lm", se = FALSE) +
+labs(title = "Partial association between alcohol expenctancies and consumption",
+subtitle = "controlling for typical drinking",
+x = "Residual from Model r.x", y = "Residual from Model r.y")
+```
+
+
+
+
+Notice how this is a "partial" relationship. The correlation between expectancies and comsumption is a normal relationship, this is the residuals. 
+
+
+
+## Regress residual ry on residual rx
+
+```{r}
+# step 4 - regress residual from step 1 on residual from step 2
+ryx <- lm(data = obs1, resid_ry ~ resid_rx)
+ols_regress(ryx)
+```
+
+
+The R in a MLR is always the correlation between the observed y and predicted y.
+
+
+
+
+
+```{r}
+cor(obs1$resid_ry, obs1$resid_rx) #Note this is is the partial correlation
+```
+
+# Fit a SLR to predict alcohol consumption (alc_gm) with pasr month alcohol use (typ_drinks)
+
+```{r}
+m1 <- lm(data = obs, alc_gm ~ typ_drks)
+ols_regress(m1)
+```
+
+
+t* = estimate/std_error <- memorize this equation!!!
+95% CI -> Beta +- crit-t*stderr <- memorize tis equation as well!!!
+
+
+```{r}
+m2 <- lm(data = obs, alc_gm ~ alcexp)
+ols_regress(m2)
+```
+
+
+
+
+
+
+#Center our predictors and then fit a MLR with typ_drinks and alcexp
+
+```{r}
+
+obs <- obs %>%
+mutate(alcexp_m = alcexp - mean(alcexp), #Centering alcexp
+typ_drks_m = typ_drks - mean(typ_drks))  #Centering typ_drinks
+
+
+m3 <- lm(data = obs, alc_gm ~ typ_drks_m + alcexp_m)
+ols_regress(m3)
+
+
+```
+
+
+
+
+
+## Obtain predicted scores
+
+```{r}
+
+predgrid_demo <- data_grid(obs,
+  alcexp_m = c(-1, 0, 1), #rememeber, your working with the mean centered values here still.
+  typ_drks_m = c(1, 1, 1)) %>%
+add_predictions(m3) #adds the predicted values for our observed values from model 3 
+
+predgrid_demo
+
+
+
+```
+
+
+
+
+#Explore experimental data
+
+
+```{r, message = FALSE}
+bac_exp <- read_csv("bac_exp.csv")
+```
+
+##Get descriptive statistics
+
+```{r}
+bac_exp <- bac_exp %>% 
+  mutate(bac100 = (bac*100))
+
+  describe(bac_exp)
+```
+
+
+
+
+
+##Create scatterplot matrix
+```{r}
+
+scatterplot2 <- ggpairs(bac_exp, columns = c("bac100", "weight", "alc_gm"),
+upper = list(continuous = wrap("cor", size=3)),
+title = "Bivariate Relationship of Key Variables")
+
+print(scatterplot2, progress=FALSE )
+
+
+```
+
+
+
+
+##Regress BAC100 on weight
+
+
+```{r}
+m4 <- lm(data = bac_exp, bac100 ~ weight)
+ols_regress(m4)
+```
+
+##Regress BAC100 on alc_gm
+
+```{r}
+m5 <- lm(data = bac_exp, bac100 ~ alc_gm)
+ols_regress(m5)
+```
+
+## Regress BAC100 on weight and alc_gm
+
+
+```{r}
+m6 <- lm(data = bac_exp, bac100 ~ alc_gm + weight)
+ols_regress(m6)
+```
+##Get predicted value fro a particular obserrvation.
+```{r}
+
+
+pred <- -1.728 + -0.029*70 + 0.259*40
+pred
+
+```
+###Get the predicted values using predict()
+```{r}
+
+predict(m6, data.frame(weight=70, alc_gm=40))
+
+
+```
+
+```{r}
+predgrid_plot <- data_grid(obs,
+  alcexp_m = seq_range(alcexp_m, 10),   #seq_range = gives me a sequence of values between the highest and lowest value within our dataframa of a variable, 10 = the number of observations
+  typ_drks_m = c(-14.67, 0, 14.67)) %>%   #choosing 1 sd below, mean, 1 sd above 
+  mutate(typ_drks_m.f = factor(typ_drks_m,
+    levels = c(-14.67, 0, 14.67),
+      labels = c("1 SD Below Mean", "Mean", "1 SD Above Mean"))) %>%
+  add_predictions(m3) %>%
+  mutate (alcexp = alcexp_m + mean(obs$alcexp)) #This makes it so we are able to get our x-axis back into the normal non-centered units.
+
+ggplot(data = predgrid_plot, aes(x = alcexp, y = pred, group = typ_drks_m.f, color = typ_drks_m.f)) +
+  geom_line() +
+  guides(color=guide_legend("Typical Drinking")) +  #"guides()" assigns the title of the LEGEND
+  labs(title = "Relationship between alcohol expectancy and alcohol consumed by typical use",
+  x = "Positive Alcohol Expectancy", y = "Alcohol Consumed on 21st Birthday (grams)")
+```
+
+
+
+
+
+```{r}
+
+pred1_exp <- data_grid(bac_exp,
+  alcexp_m = seq_range(alc_gm, 10),
+  typ_drks_m = c(-14.67, 0, 14.67)) %>%
+mutate(typ_drks_m.f = factor(typ_drks_m,
+  levels = c(-14.67, 0, 14.67),
+    labels = c("1 SD Below Mean", "Mean", "1 SD Above Mean")))
+
+
+pred2 <- predict(m3, pred1, interval = "confidence") %>%
+  as_data_frame()
+
+pred3 <- cbind(pred1, pred2) %>%
+  mutate (alcexp = alcexp_m + mean(obs$alcexp))
+
+ggplot(data = pred3, aes(x = alcexp, y = fit, group = typ_drks_m.f, color =typ_drks_m.f)) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr, color = NULL), alpha = .4, fill = "grey60") + #geom_ribbon is the geomoetry for plotting CI's
+  geom_line(size = 1) +
+  guides(color=guide_legend("Typical Drinking")) +
+  labs(title = "Relationship between alcohol expectancy and alcohol consumed by typical use",
+  x = "Positive Alcohol Expectancy", y = "Alcohol Consumed on 21st Birthday (grams)")
+```
+
+
+
+
+```{r}
+
+
+
+
+pred1 <- data_grid(bac_exp,
+  alc_gm = seq_range(alc_gm, 10),
+  weight = c(40, 60, 80)) %>%
+mutate(weight.f = factor(weight,
+  levels = c(40, 60, 80),
+    labels = c("40 kg", "60 kg", "80 kg"))) %>% 
+  add_predictions(m6)
+
+
+ggplot(data = pred1, aes(x = alc_gm, y = pred, group = weight.f, color = weight.f)) +
+  geom_line() +
+  guides(color=guide_legend("alcohol grams consumed")) +  #"guides()" assigns the title of the LEGEND
+  labs(title = "Relationship between alcohold grams consumed and bac (multiplied by 100)",
+  x = "alcohol grams consumed", y = "BAC (times 100)")
+```
+
+
+
+
+```{r}
+
+
+
+ols_correlations(m6)
+ols_correlations(m6)^2
+
+```
+
+```{r}
+# observational dataset
+
+cor(obs1$resid_ry, obs1$resid_rx) #partial correlation (residuals of x and y)
+cor(obs1$alc_gm, obs1$resid_rx)   #semi-partial correlation (residuals of x but NOT y)
+
+ols_correlations(m3)
+ols_correlations(m3)^2 #This gets the partial and semi-partial r^2
+```
+
+
+
+
+
+#Examine Hierarchical regression
+##Obtaine the critical value of F for the partial F-tets
+
+```{r}
+qf(.95, df1 = 3, df2 = 194)
+```
+
+
+##Model 1
+```{r}
+# bac is a very small number -- we will multiply it by 100 so it's easier to read the output,
+# we will also center all of the predictors at the mean
+obs <- obs %>%
+  mutate(bac100 = bac*100,
+  alc_gm_m = alc_gm - mean(alc_gm),
+  weight_m = weight - mean(weight),
+  absorb_m = absorb - mean(absorb),
+  alcexp_m = alcexp - mean(alcexp),
+  typ_drks_m = typ_drks - mean(typ_drks))
+
+  mod1 <- lm(data = obs, bac100 ~ alcexp_m + typ_drks_m)
+  
+ols_regress(mod1)
+```
+
+
+
+##Model 2
+```{r}
+mod2 <- lm(data = obs, bac100 ~ alcexp_m + typ_drks_m + absorb_m + weight_m + alc_gm_m)
+
+ols_regress(mod2)
+
+
+#Sum of squares error = Residual sum of squares (71.452).
+#The Df comes from the regression DF (5)
+
+```
+
+
+##COmpare the mdoels
+```{r}
+anova(mod1, mod2, test = "F")
+
+#RSS = resiudal sum of squares. (this is just the unique residuals of each )
+```
+
+
+
+
+Hierarchical linear regression does NOT equal Hierarchical regression DO NOT GET THESE CONFUSED!!!!
+
+
+
+
+##Make a plot for the effect of alc_gm in mdoel 2
+```{r}
+
+
+predgrid <- data_grid(obs,
+  alc_gm_m = seq_range(alc_gm_m, 10),
+  weight_m = c(-9.92, 0, 9.92),
+  absorb_m = 0,
+  alcexp_m = 0,
+  typ_drks_m = 0) %>%
+mutate(weight_m.f = factor(weight_m, levels = c(-9.92, 0, 9.92), #rememeber, you put it into a factor because it makes it plottable on our legend.
+  labels = c("1 SD Below Mean", "Mean", "1 SD Above Mean"))) %>%
+add_predictions(mod2) %>%
+mutate (bac = pred/100, alc_gm = alc_gm_m + mean(obs$alc_gm))
+
+ggplot(data = predgrid, aes(x = alc_gm, y = bac, group = weight_m.f, color = weight_m.f)) +
+  geom_line() +
+    guides(color=guide_legend("Weight of Respondent")) +
+    labs(title = "Relationship between alcohol consumed and BAC by Weight",
+    subtitle = "Effects are adjusted for alcohol absorption, typical drinking, and alcohol expectancy",
+    x = "Grams of Alcohol Consumed", y = "BAC")
+
+
+
+```
+
+
+##Create model 3
+```{r}
+
+mod3 <- lm(data = obs, bac100 ~ weight_m + alc_gm_m)
+ols_regress(mod3)
+
+```
+
+##compare model 2 and 3
+```{r}
+anova(mod3, mod2, test = "F")
+```
+
+
+
+```{r}
+huxreg("Model 1" = mod1, "Model 2" = mod2, "Model 3" = mod3, error_format = "({std.error})",
+statistics = c("N" = "nobs", "R-Squared" = "r.squared", "F statistic" = "statistic", "P value" = "p.value"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

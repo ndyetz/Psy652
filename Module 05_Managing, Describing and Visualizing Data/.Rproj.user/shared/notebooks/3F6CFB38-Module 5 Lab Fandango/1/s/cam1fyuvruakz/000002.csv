@@ -1,0 +1,11 @@
+"0","```r
+summary(fandango)
+```"
+"1","     film                year          stars         website         
+ Length:1022        Min.   :2014   Min.   :0.500   Length:1022       
+ Class :character   1st Qu.:2015   1st Qu.:3.000   Class :character  
+ Mode  :character   Median :2015   Median :3.500   Mode  :character  
+                    Mean   :2015   Mean   :3.407                     
+                    3rd Qu.:2015   3rd Qu.:4.000                     
+                    Max.   :2015   Max.   :5.000                     
+"

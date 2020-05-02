@@ -1,0 +1,16 @@
+"0","set.cor(y = (""bac100""), x = c(""alc_gm"", ""weight""), z = NULL, data = cor_matrix)"
+"1","Call: "
+"1","setCor(y = y, x = x, data = data, z = z, n.obs = n.obs, use = use, 
+"
+"1","    std = std, square = square, main = main, plot = plot, show = show)
+"
+"1","
+Multiple Regression from matrix input 
+"
+"1","
+ DV = "
+"1"," "
+"1","bac100"
+"1"," "
+"1","
+"

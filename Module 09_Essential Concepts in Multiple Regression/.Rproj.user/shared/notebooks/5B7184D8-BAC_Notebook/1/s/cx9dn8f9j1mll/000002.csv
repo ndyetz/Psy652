@@ -1,0 +1,7 @@
+"0","```r
+predgrid_demo <- data_grid(obs,
+  alcexp_m = c(-1, 0, 1), #rememeber, your working with the mean centered values here still.
+  typ_drks_m = c(1, 1, 1)) %>%
+add_predictions(m3) #adds the predicted values for our observed values from model 3 
+predgrid_demo
+```"

@@ -1,0 +1,6 @@
+"0","```r
+scatterplot <- ggpairs(obs, columns = c(\"typ_drks\", \"alcexp\", \"alc_gm\"),
+upper = list(continuous = wrap(\"cor\", size=3)),
+title = \"Bivariate Relationship of Key Variables\")
+print(scatterplot, progress=FALSE )
+```"

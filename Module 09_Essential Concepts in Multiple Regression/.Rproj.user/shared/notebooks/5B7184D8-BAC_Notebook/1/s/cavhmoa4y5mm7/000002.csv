@@ -1,0 +1,15 @@
+"0","```r
+predgrid_plot <- data_grid(obs,
+  alcexp_m = seq_range(alcexp_m, 10),   #seq_range = gives me a sequence of values between the highest and lowest value within our dataframa of a variable, 10 = the number of observations
+  typ_drks_m = c(-14.67, 0, 14.67)) %>%   #choosing 1 sd below, mean, 1 sd above 
+  mutate(typ_drks_m.f = factor(typ_drks_m,
+    levels = c(-14.67, 0, 14.67),
+      labels = c(\"1 SD Below Mean\", \"Mean\", \"1 SD Above Mean\"))) %>%
+  add_predictions(m3) %>%
+  mutate (alcexp = alcexp_m + mean(obs$alcexp)) #This makes it so we are able to get our x-axis back into the normal non-centered units.
+ggplot(data = predgrid_plot, aes(x = alcexp, y = pred, group = typ_drks_m.f, color = typ_drks_m.f)) +
+  geom_line() +
+  guides(color=guide_legend(\"Typical Drinking\")) +  #\"guides()\" assigns the title of the LEGEND
+  labs(title = \"Relationship between alcohol expectancy and alcohol consumed by typical use\",
+  x = \"Positive Alcohol Expectancy\", y = \"Alcohol Consumed on 21st Birthday (grams)\")
+```"

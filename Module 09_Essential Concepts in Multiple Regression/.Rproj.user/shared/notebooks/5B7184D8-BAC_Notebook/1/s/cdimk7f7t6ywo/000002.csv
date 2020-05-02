@@ -1,0 +1,14 @@
+"0","```r
+pred1 <- data_grid(bac_exp,
+  alc_gm = seq_range(alc_gm, 10),
+  weight = c(40, 60, 80)) %>%
+mutate(weight.f = factor(weight,
+  levels = c(40, 60, 80),
+    labels = c(\"40 kg\", \"60 kg\", \"80 kg\"))) %>% 
+  add_predictions(m6)
+ggplot(data = pred1, aes(x = alc_gm, y = pred, group = weight.f, color = weight.f)) +
+  geom_line() +
+  guides(color=guide_legend(\"alcohol grams consumed\")) +  #\"guides()\" assigns the title of the LEGEND
+  labs(title = \"Relationship between alcohold grams consumed and bac (multiplied by 100)\",
+  x = \"alcohol grams consumed\", y = \"BAC (times 100)\")
+```"

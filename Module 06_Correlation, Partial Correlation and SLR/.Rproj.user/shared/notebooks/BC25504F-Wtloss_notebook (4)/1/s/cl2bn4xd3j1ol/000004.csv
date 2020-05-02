@@ -1,0 +1,2 @@
+"0","##Via ggplot2's ggplot function"
+"0","ggplot(wtloss, aes(y = lbslost)) + geom_boxplot()"

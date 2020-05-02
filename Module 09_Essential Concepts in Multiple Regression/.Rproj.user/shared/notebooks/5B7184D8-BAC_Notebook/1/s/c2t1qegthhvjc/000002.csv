@@ -1,0 +1,9 @@
+"0","```r
+# step 3 - plot residual from step 1 (on y) and residual from step 2 (on x) on a scattergram
+ggplot(data=obs1, aes(x = resid_rx, y = resid_ry)) +
+geom_point() +
+geom_smooth(method = \"lm\", se = FALSE) +
+labs(title = \"Partial association between alcohol expenctancies and consumption\",
+subtitle = \"controlling for typical drinking\",
+x = \"Residual from Model r.x\", y = \"Residual from Model r.y\")
+```"

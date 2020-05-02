@@ -1,0 +1,6 @@
+"0","mean(stress$StressLevel)"
+"1","[1]"
+"1"," 5.475"
+"1","
+"
+"0","aggregate(x=stress$StressLevel, by=list(stress$ProgramCode.f), FUN=mean)"

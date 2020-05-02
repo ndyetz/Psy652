@@ -1,0 +1,2 @@
+"0","attach(wtloss)"
+"0","pcor.test(x = lbslost, y = caldef, z = selfeff)"

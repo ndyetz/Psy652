@@ -1,0 +1,133 @@
+---
+title: "R Notebook to explore cherry blossom 10 mile race data"
+output: html_notebook
+---
+
+# about the data
+The Cherry Blossom 10 Mile Run is a road race held in Washington, D.C. in April each year. (The name comes from the famous cherry trees that are in bloom in April in Washington.) The results of this race are published. This data frame contains the results from the 2005 race.
+
+
+The dataframe, called TenMileRace, represents all 8636 runners and includes the following variables:
+
+state: State of residence of runner.
+
+time: Official time (in seconds) from starting gun to finish line.
+
+net: The recorded time (in seconds) from when the runner crossed the starting line to when the runner crossed the finish line. This is generally less than the official time because of the large number of runners in the race: it takes time to reach the starting line after the gun has gone off.
+
+age: Age of runner in years.
+
+sex: A factor with levels F M.
+
+
+# load libraries
+```{r}
+
+library(psych)
+library(tidyverse)
+
+```
+
+# read in dataframe
+```{r}
+population <- read.csv("TenMileRace.csv")
+```
+
+# describe variables
+```{r}
+describe(population)
+```
+
+# explore the principles of the sampling distribution
+## store population mean
+```{r}
+
+mean_net_time = mean(population$net)
+mean_net_time
+
+# get time in minutes
+mean_net_time/60
+
+```
+
+## create a histogram of net time across all people in the population
+### in ggplot2
+```{r}
+
+ggplot(population, aes(x = net)) +
+  geom_histogram(binwidth = 60) +
+  labs (title = "Net time for race completion in seconds across participants", x = "time in seconds")
+
+```
+
+### in base r
+```{r}
+hist(population$net, breaks = 60, main = "Net time for race completion in seconds across participants", xlab = "time in seconds" )
+```
+
+
+## draw 5 random samples from the population
+```{r}
+sample1 <- sample_n(population, 50, replace = TRUE)
+sample2 <- sample_n(population, 50, replace = TRUE)
+sample3 <- sample_n(population, 50, replace = TRUE)
+sample4 <- sample_n(population, 50, replace = TRUE)
+sample5 <- sample_n(population, 50, replace = TRUE)
+```
+
+## calculate the mean in each random sample
+```{r}
+mean(sample1$net)
+mean(sample2$net)
+mean(sample3$net)
+mean(sample4$net)
+mean(sample5$net)
+```
+The means vary by approximately 500 seconds when you calculate this value from different random subsamples of the original population dataset. The original population's net mean was 5599.07	with a standard deviation of 969.66. Thus, many of these values are lower than the original mean. They differ from the original mena by as much as ~1/2 of an SD. (Note: these values will vary by individual, and by each time you run your notebook)
+
+## Save all means to one dataframe
+```{r}
+means <- c(5944, 5660, 5596, 5670, 5877) #first save all means as an object
+sampling_dist <- data.frame(means) #the data.frame function converts this object into a dataframe
+```
+
+## make a histogram of the random sample means
+```{r}
+ggplot(sampling_dist, aes(x = means)) +
+  geom_histogram(binwidth = 5) +
+  labs (title = "Net time for race completion in seconds for 5 random subsamples of 50 ", x = "time in seconds")
+```
+The range of means is narrower across these five subsamples than in original population dataframe. 
+
+
+## Draw 5000 random samples, obtain the mean in each, and plot
+```{r}
+
+rep_sample_n <- function(tbl, size, replace = FALSE, reps = 1)
+{
+    n <- nrow(tbl)
+    i <- unlist(replicate(reps, sample.int(n, size, replace = replace), simplify = FALSE))
+
+    rep_tbl <- cbind(replicate = rep(1:reps,rep(size,reps)), tbl[i, , drop=FALSE])
+
+    dplyr::group_by(rep_tbl, replicate)
+}
+
+
+sample_means <- population %>%
+  rep_sample_n(size = 50, reps = 5000, replace = TRUE) %>%
+  summarize(mean_net = mean(net))
+
+m <- as.matrix(summarise(sample_means, m = mean(mean_net)))
+
+ggplot(sample_means, aes(x = mean_net)) + 
+  geom_histogram(binwidth = 5) +
+  geom_vline(xintercept = mean_net_time, lwd = 1, color="deeppink") +
+  geom_vline(xintercept = m, lwd = 0.5, color="gold") + 
+  labs(title = "Average time across 5000 samples", subtitle = "red line = population mean from original sample\nblue line = mean of means from 5000 random samples", x = "average time in the sample")
+
+```
+ 14: The mean of the distribution is quite similar. The range of the means in the above plot is smaller than the full sample distribution, which makes sense because the above plot presents means of the means. The above plot  (means of means) is flatter, with less kurtosis. Both follow a bell curve shape, indicating normal distribution.
+ 
+ 15: Practically, whenever you calculate any test statistic, you're result will be contained within the sampling distribution of your population of interest. 
+

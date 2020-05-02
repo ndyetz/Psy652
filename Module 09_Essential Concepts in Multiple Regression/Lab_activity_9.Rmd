@@ -1,0 +1,101 @@
+---
+title: "Module 9 Lab activity"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  html_notebook:
+    toc: yes
+---
+
+
+# load libraries
+```{r, message= FALSE}
+library(tidyverse)
+library(psych)
+library(olsrr)
+library(GGally)
+```
+
+# Import data
+```{r}
+
+bac <- read_csv("bac_obs.csv")
+
+
+```
+
+
+
+# Describe the data
+```{r}
+
+describe(bac)
+
+```
+
+
+# Mutate BAC variable
+```{r}
+
+bac <- mutate(bac, bac100 = bac*100)
+
+```
+
+
+# Get Sccatterplot matrix
+```{r, message = FALSE}
+
+scatterplot2 <- ggpairs(bac, columns = c("bac100", "pmood", "typ_drks", "weight", "alc_gm"),
+upper = list(continuous = wrap("cor", size=5)),
+title = "Bivariate Relationship of Key Variables", progress = ggmatrix_progress(clear = TRUE))
+
+print(scatterplot2)
+
+```
+
+
+# Fit Regression
+## Regress BAC100 on weight 
+```{r}
+m1 <- lm(data = bac, bac100 ~ weight)
+ols_regress(m1)
+```
+
+
+## Regress BAC100 on alc_gm
+```{r}
+m2 <- lm(data = bac, bac100 ~ alc_gm)
+ols_regress(m2)
+```
+
+
+
+## Regress BAC100 on weight and alc_gm
+```{r}
+m3 <- lm(data = bac, bac100 ~ alc_gm + weight)
+ols_regress(m3)
+```
+
+
+
+# Subset data for correlation matrix 
+```{r}
+
+bac_subset <- select(bac, bac100, alc_gm, weight)
+cor_matrix <- cor(bac_subset)
+
+```
+
+
+
+
+# Calculate regression from correlation matrix
+```{r}
+set.cor(y = ("bac100"), x = c("alc_gm", "weight"), z = NULL, data = cor_matrix)
+```
+
+
+
+
+

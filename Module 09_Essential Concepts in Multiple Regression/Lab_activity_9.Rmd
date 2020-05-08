@@ -1,10 +1,13 @@
 ---
 title: "Module 9 Lab activity"
+author: "Neil Yetz & Gemma Wallace"
 output:
-  html_document:
-    df_print: paged
+  pdf_document:
     toc: yes
   html_notebook:
+    toc: yes
+  html_document:
+    df_print: paged
     toc: yes
 ---
 

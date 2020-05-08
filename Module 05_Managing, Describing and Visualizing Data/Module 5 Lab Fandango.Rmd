@@ -1,8 +1,12 @@
 ---
 title: "Fandango_Notebook"
-subtitle: "PSY 652 RM Module 5 Lab"
+author: "Neil Yetz & Gemma Wallace"
+subtitle: PSY 652 RM Module 5 Lab
 output:
   html_notebook:
+    toc: yes
+  html_document:
+    df_print: paged
     toc: yes
 ---
 This activity is designed to build familiarity with data wrangling techniques in R.

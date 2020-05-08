@@ -1,5 +1,6 @@
 ---
 title: "R Notebook for Module 7"
+author: Neil Yetz & Gemma Wallace
 subtitle: "Exploration of the Principles of Statistical Inference"
 output: 
   html_notebook: 

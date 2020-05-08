@@ -1,7 +1,11 @@
 ---
 title: 'R Notebook for: Matrix Algebra Practice'
-subtitle: null
+subtitle: Neil Yetz & Gemma Wallace
 output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '5'
   pdf_document:
     toc: yes
     toc_depth: '5'
@@ -9,10 +13,6 @@ output:
     theme: lumen
     toc: yes
     toc_depth: 5
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '5'
 ---
 
 

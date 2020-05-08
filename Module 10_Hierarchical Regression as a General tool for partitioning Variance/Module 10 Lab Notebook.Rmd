@@ -1,11 +1,13 @@
 ---
-title: "R Notebook for PSY 652 Module 10 Lab: Hierarchical Regression Practice"
+title: 'R Notebook for PSY 652 Module 10 Lab: Hierarchical Regression Practice'
 subtitle: Gemma Wallace & Neil Yetz
 output:
-  html_document:
-    df_print: paged
+  pdf_document:
     toc: yes
   html_notebook:
+    toc: yes
+  html_document:
+    df_print: paged
     toc: yes
 ---
 

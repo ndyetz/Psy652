@@ -1,0 +1,22 @@
+\contentsline {section}{Load Libraries}{1}{section*.2}
+\contentsline {section}{Import data}{1}{section*.3}
+\contentsline {section}{Merge data}{1}{section*.4}
+\contentsline {section}{Describe Data}{1}{section*.5}
+\contentsline {subsection}{Via base R's summary function}{1}{section*.6}
+\contentsline {subsection}{Via psych's describe function}{2}{section*.7}
+\contentsline {section}{Look for outliers with boxplots}{2}{section*.8}
+\contentsline {subsection}{Via Base R's boxplot function}{2}{section*.9}
+\contentsline {subsection}{Via ggplot2's ggplot function}{3}{section*.10}
+\contentsline {section}{Plot relationships between variables}{4}{section*.11}
+\contentsline {subsection}{Via Base R's plot function}{4}{section*.12}
+\contentsline {subsection}{Via ggplot2's ggplot function}{7}{section*.13}
+\contentsline {section}{Correlations}{10}{section*.14}
+\contentsline {subsection}{Pearson's Correlations Matrices}{10}{section*.15}
+\contentsline {subsubsection}{Via Base R's cor function}{10}{section*.16}
+\contentsline {subsubsection}{Via apaTables' apa.cor.table function}{10}{section*.17}
+\contentsline {subsection}{Get partial correlation}{11}{section*.18}
+\contentsline {subsection}{Get semipartial correlation}{11}{section*.19}
+\contentsline {section}{Fit a Simple Linear Regression (SLR) Model}{12}{section*.20}
+\contentsline {subsection}{Display SLR model results}{12}{section*.21}
+\contentsline {subsubsection}{Via base R's summary function}{12}{section*.22}
+\contentsline {subsubsection}{Via olsrr's ols\_regress function}{12}{section*.23}

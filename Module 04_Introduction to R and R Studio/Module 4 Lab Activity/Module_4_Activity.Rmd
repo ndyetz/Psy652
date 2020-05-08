@@ -1,11 +1,11 @@
 ---
 title: "Iris data exploration"
-subtitle: Your Name
+subtitle: Neil Yetz & Gemma Wallace
 output:
+  html_notebook:
+    toc: yes
   html_document:
     df_print: paged
-    toc: yes
-  html_notebook:
     toc: yes
 ---
 

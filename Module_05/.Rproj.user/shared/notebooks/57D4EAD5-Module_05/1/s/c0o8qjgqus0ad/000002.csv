@@ -1,0 +1,18 @@
+"0","```r
+gss <- read_csv(\"gss.csv\")
+```"
+"1","Parsed with column specification:
+cols(
+  id = col_double(),
+  year = col_double(),
+  age = col_double(),
+  class = col_character(),
+  degree = col_character(),
+  sex = col_character(),
+  marital = col_character(),
+  race = col_character(),
+  happy = col_character(),
+  zodiac = col_character(),
+  party = col_character()
+)
+"

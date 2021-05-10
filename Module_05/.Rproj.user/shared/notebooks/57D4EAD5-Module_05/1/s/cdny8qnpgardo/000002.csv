@@ -1,0 +1,14 @@
+"0","```r
+
+#Calulate Odds for Males being happy
+males_happy <- 37 / 78
+
+# Calculate odds for males being unhappy
+males_unhappy <- 21 / 13
+
+# Get the odds ratio
+OR <-  males_unhappy / males_happy
+OR
+```"
+"1","[1] 3.405405
+"

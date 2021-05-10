@@ -1,0 +1,2 @@
+"0","slp_reduced <- select(slp, id, sex, cond = ""cond2"", prior, sleep = ""sleep_cat"")"
+"0","describe(slp_reduced)"

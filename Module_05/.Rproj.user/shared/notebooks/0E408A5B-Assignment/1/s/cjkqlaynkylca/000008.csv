@@ -1,0 +1,6 @@
+"0","slp <- mutate(slp, "
+"0","              sex       = as.factor(sex),"
+"0","              cond      = as.factor(cond),"
+"0","              prior     = as.factor(prior),"
+"0","              sleep = as.factor(sleep)"
+"0","              )"

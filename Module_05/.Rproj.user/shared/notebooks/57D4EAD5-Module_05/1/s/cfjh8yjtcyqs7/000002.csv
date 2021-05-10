@@ -1,0 +1,12 @@
+"0","```r
+#provides us useless output
+summary(gss_reduced)
+```"
+"1","       id           sex               happy              zodiac             party          
+ Min.   :   6   Length:149         Length:149         Length:149         Length:149        
+ 1st Qu.: 841   Class :character   Class :character   Class :character   Class :character  
+ Median :1502   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+ Mean   :1469                                                                              
+ 3rd Qu.:2137                                                                              
+ Max.   :2829                                                                              
+"

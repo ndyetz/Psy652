@@ -1,0 +1,17 @@
+"0","slp <- read_csv(""slpdata.csv"")"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m----------------------------------------------------------------------------------------------------------------------------------[39m
+cols(
+  cond = [32mcol_double()[39m,
+  prior = [32mcol_double()[39m,
+  age = [32mcol_double()[39m,
+  anxiety = [32mcol_double()[39m,
+  hygiene = [32mcol_double()[39m,
+  support = [32mcol_double()[39m,
+  sleep = [32mcol_double()[39m,
+  lifesat = [32mcol_double()[39m,
+  sex = [32mcol_double()[39m,
+  id = [32mcol_double()[39m
+)
+
+"

@@ -1,0 +1,157 @@
+---
+title: "R Notebook for Module 7"
+subtitle: "Exploration of the Principles of Statistical Inference"
+output: 
+  html_notebook: 
+    theme: lumen
+    toc: yes
+    toc_depth: 5
+---
+
+
+# Clear Environment
+```{r}
+rm(list =ls())
+```
+
+
+# Load libraries
+```{r, message = FALSE}
+
+library(psych)
+library(broom)
+library(tidyverse)
+
+```
+
+
+# Consider lbslost in the hypothetical population
+## Simulate a population
+```{r}
+
+# generate some data
+set.seed(8642)
+p_lbslost <- rnorm(n=50000, m=3.00, sd=2.00) # generate a population of 50,000 men
+my_pop <- data.frame(p_lbslost)
+
+meanpop <- mean(my_pop$p_lbslost) # save the average lbslost in the population -- our population mean
+
+
+
+```
+
+## Describe data 
+
+```{r}
+describe(my_pop)
+```
+
+### Create a histogram of the population
+
+```{r}
+# plot the normal distribution
+ggplot(my_pop, aes(x = p_lbslost)) +
+  geom_histogram(binwidth = .25) +
+  labs(title = "Pounds lost following a weight loss program", subtitle = "simulation of a population", x = "pounds lost")
+
+
+
+```
+
+
+
+## Randomly select 3 samples of size 100 from the population
+```{r}
+
+set.seed(19657)
+s1 <- sample_n(my_pop, 100, replace = TRUE)
+s2 <- sample_n(my_pop, 100, replace = TRUE)
+s3 <- sample_n(my_pop, 100, replace = TRUE)
+
+```
+
+
+
+## Calculate the mean for each random sample
+```{r}
+mean(s1$p_lbslost)
+mean(s2$p_lbslost)
+mean(s3$p_lbslost)
+```
+
+The means are all relatively similar to the population mean. The larger the sample sizes are the more likely they will approximate the mean. 
+
+
+# Inference for SLR
+## Simulate a population based on SLR results
+```{r}
+
+set.seed(83587)
+caldef <- rnorm (mean = 10.80, sd = 5.15, n = 100000)
+
+b0 <- -.12
+b1 <- .29
+
+sigma <- 2.1
+
+e <- rnorm(mean = 0, sd = sigma, n = 100000)
+
+lbslost <- b0 + b1*caldef + e
+
+my_regpop <- data.frame(caldef, lbslost)
+
+```
+
+
+### Create scatterplot for population SLR
+```{r}
+
+ggplot(my_regpop, aes(x = caldef, y = lbslost)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Scatterplot of Caloric Deficit and Pounds Lost", x = "Caloric Deficit", y = "Pounds Lost")
+
+```
+
+### Fit a Simple Linear regression (SLR) model of the population
+```{r}
+
+popmod <- lm(lbslost ~ caldef, data = my_regpop)
+summary(popmod)
+
+```
+
+
+
+## Randomly select 3 samples of 100 from the population
+```{r}
+
+s1 <- sample_n(my_regpop, 100, replace = TRUE)
+s2 <- sample_n(my_regpop, 100, replace = TRUE)
+s3 <- sample_n(my_regpop, 100, replace = TRUE)
+
+```
+
+
+
+
+## Fit an SLR to each random sample
+```{r}
+
+
+s1_mod <- lm(lbslost ~ caldef, data = s1)
+s2_mod <- lm(lbslost ~ caldef, data = s2)
+s3_mod <- lm(lbslost ~ caldef, data = s3)
+```
+
+
+
+```{r}
+summary(s1_mod)
+summary(s2_mod)
+summary(s3_mod)
+
+```
+
+
+Although each model varies slightly, it is seen that the sample intercepts and slopes are relatively similar to the population intercept and slope. Each intercept and slope confidence interval contains the true population value. If we run these tests 100 times, the true population value will likely be contain in the confidence intervals 95 times. We also see that the standard errors increased when we took the samples of 100. 

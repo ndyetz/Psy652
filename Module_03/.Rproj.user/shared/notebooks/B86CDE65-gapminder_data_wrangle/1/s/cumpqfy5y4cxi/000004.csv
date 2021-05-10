@@ -1,0 +1,8 @@
+"0","gm %>%"
+"0","  filter(continent != ""Oceania"") %>%"
+"0","  select(year, continent, country, lifeExp) %>%"
+"0","  group_by(continent, year) %>%"
+"0","  summarize(avg_lifeExp = mean(lifeExp), "
+"0","            sd_lifeExp =sd(lifeExp), "
+"0","            ncount = n(), "
+"0","            .groups = ""drop"")"

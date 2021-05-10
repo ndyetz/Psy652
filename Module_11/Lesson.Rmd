@@ -1,0 +1,105 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Load libraries
+```{r, message = FALSE}
+library(tidyverse)
+library(psych)
+```
+
+# Import data
+```{r,message=FALSE}
+slp <- read_csv("slpdata.csv")
+```
+
+# Reduce to variables of interest
+```{r}
+slp_reduced <- select(slp, cond, sleep)
+```
+
+
+# Factor the grouping variable
+```{r}
+slp_reduced <- slp_reduced %>% 
+  mutate(cond.f = factor(cond, 
+                                levels = c(1,2,3),
+                                labels = c("Control", "Sleep int", "Sleep int + Partner")))
+```
+
+
+# Get descriptives
+## Overall
+```{r}
+
+describe(slp_reduced)
+
+```
+
+#Grouped
+```{r}
+slp_grouped <- group_by(slp_reduced, cond.f)
+summarize(slp_grouped, sleep_mean = mean(sleep))
+```
+
+# Create boxplots of sleep across treatment groups
+```{r}
+ggplot(slp_reduced, aes(y = sleep, group = cond.f, color = cond.f)) +
+  geom_boxplot() 
+```
+
+
+
+# Conduct an ANOVA
+```{r}
+lm1 <- lm(sleep ~ cond.f, data = slp_reduced)
+anova(lm1)
+```
+
+
+## Obtain eta squared
+```{r}
+22892 / (22892 + 65385)
+```
+
+
+
+# Conduct planned contrasts
+## Create contrasts
+```{r}
+c1 <- c(-1, 0, 1)
+c2 <- c(0, -1, 1)
+```
+
+
+
+## Bind contrasts to predictor variable 
+```{r}
+
+contrasts(slp_reduced$cond.f) <-  cbind(c1,c2)
+
+```
+
+# View the structure of the data
+```{r}
+#View the structure and attributes
+str(slp_reduced)
+
+```
+
+
+## View the attributes of slp_reduced$cond.f
+```{r}
+attributes(slp_reduced$cond.f)
+```
+
+
+
+# Run ANOVA with contrasts
+```{r}
+lm_contrast <- lm(sleep ~ cond.f, data = slp_reduced)
+summary.lm(lm_contrast)
+```
+
+

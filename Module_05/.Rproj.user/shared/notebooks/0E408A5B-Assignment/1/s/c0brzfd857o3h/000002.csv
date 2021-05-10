@@ -1,0 +1,10 @@
+"0","slp <- read_csv(""slp_cat.csv"")"
+"2","Parsed with column specification:
+cols(
+  id = [32mcol_double()[39m,
+  sex = [31mcol_character()[39m,
+  cond = [31mcol_character()[39m,
+  prior = [31mcol_character()[39m,
+  sleep = [31mcol_character()[39m
+)
+"

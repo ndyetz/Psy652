@@ -1,0 +1,153 @@
+---
+title: "Analysis of categorical variables"
+output: 
+  html_notebook:
+    toc: yes
+---
+
+# Load Libraries
+```{r}
+library(tidyverse)
+library(epitools)
+```
+
+# Read in data
+```{r}
+gss <- read_csv("gss.csv")
+```
+
+# reduce dataset to variables of interest
+```{r}
+gss_reduced <- select(gss, id, sex, happy, zodiac, party)
+```
+
+
+# Get structure of dataset
+Notice that you have 4 character (chr) variables. These are going to give us problems later if we don't do something about it. 
+```{r}
+str(gss_reduced)
+```
+
+# Get summary of character variables
+Because most of our variables are character, the summary function is basically useless.
+```{r}
+#provides us useless output
+summary(gss_reduced)
+```
+
+# Factor our character variables via mutate()
+Factoring provides a numeric value to a character variable.
+```{r}
+
+gss_reduced <- mutate(gss_reduced, 
+                      sex = as.factor(sex),
+                      happy = as.factor(happy),
+                      zodiac = as.factor(zodiac),
+                      party = as.factor(party)
+                      )
+
+```
+
+
+# Get new structure of dataset
+Notice, our character variables are now factors
+```{r}
+str(gss_reduced)
+```
+
+# Get new summary of dataset
+"maxsum =" indicates how many factor levels you want to show (the default deprecates at 6 levels)
+```{r}
+summary(gss_reduced, maxsum = 12)
+```
+
+
+
+# chi-square analyses:
+## Step 1: Create a table of your variables
+Below we will be creating a table object of the variables sex & happy from the gss_reduced dataset.
+We will then view the object.
+```{r}
+
+
+sex_happy <- select(gss_reduced, sex, happy)
+sex_happy_table <- table(sex_happy)
+
+sex_happy_table
+```
+## Step 2: run chisq.test() on the new table object
+```{r}
+chisq.test(sex_happy_table)
+```
+### Step 2.1: If significant, calculate the contigency coeffient effect size
+Results were significant (p <.05)
+```{r}
+# contingency coefficient = sqrt(X^2 / (X^2 + N))
+sqrt(8.4605 / (8.4602 + 149))
+```
+# Another chi-square analysis 
+## Step 1: Create a table of your variables
+Below we will be creating a table object of the variables sex & party from the gss_reduced dataset.
+We will then view the object.
+```{r}
+
+sex_party <- select(gss_reduced, sex, party)
+sex_party_table <- table(sex_party)
+
+sex_party_table
+```
+## Step 2: run chisq.test() on the new table object
+```{r}
+
+chisq.test(sex_party_table)
+
+```
+### Step 2.1: If significant, calculate the contigency coeffient effect size
+Results were non-significant ( p > .05)
+
+
+# Get odds ratio of our 2x2 table (sex_happy_table)
+## First calculate it by hand
+### OR of Males being unhappy as compared to females
+
+```{r}
+# Get our table
+sex_happy_table
+```
+
+```{r}
+
+#Calulate Odds for Males being happy
+males_happy <- 37 / 78
+
+# Calculate odds for males being unhappy
+males_unhappy <- 21 / 13
+
+# Get the odds ratio
+OR <-  males_unhappy / males_happy
+OR
+
+```
+Males are 3.405 times to be UNHAPPY as compared to females. 
+
+## Then calculate it via oddsratio.wald()
+The oddsratio.wald() function comes from the epitools package.
+```{r}
+
+oddsratio.wald(sex_happy_table)
+
+```
+Males are 3.405 times to be UNHAPPY as compared to females. 
+
+
+### Reverse columns and get OR of men being HAPPY as compared to Females
+```{r}
+oddsratio.wald(sex_happy_table, rev = "columns")
+```
+
+Males are .29 times as likely to be happy as compared to females (meaning they are less likely to be happy!)
+
+
+
+
+

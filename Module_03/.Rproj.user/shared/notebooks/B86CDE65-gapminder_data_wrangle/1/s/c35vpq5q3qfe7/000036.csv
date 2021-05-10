@@ -1,0 +1,8 @@
+"0",""
+"0",""
+"0","#Summarize multiple aspects by year"
+"0","gm_by_year <- group_by(gm, year)"
+"0","summarize(gm_by_year, "
+"0","          avg_lifeExp = mean(lifeExp), "
+"0","          sd_lifeExp = sd(lifeExp), "
+"0","          ncount = n(), .groups = ""drop"")"

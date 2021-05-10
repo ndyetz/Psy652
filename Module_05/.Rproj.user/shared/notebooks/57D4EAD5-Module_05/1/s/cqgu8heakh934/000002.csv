@@ -1,0 +1,10 @@
+"0","```r
+
+gss_reduced <- mutate(gss_reduced, 
+                      sex = as.factor(sex),
+                      happy = as.factor(happy),
+                      zodiac = as.factor(zodiac),
+                      party = as.factor(party)
+                      )
+
+```"

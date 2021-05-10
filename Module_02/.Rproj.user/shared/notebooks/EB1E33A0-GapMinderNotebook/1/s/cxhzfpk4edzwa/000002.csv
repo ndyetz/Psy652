@@ -1,0 +1,13 @@
+"0",""
+"0","#Comments still work in the gray area!"
+"0","gm <- read_csv(""gapminder.csv"")"
+"2","Parsed with column specification:
+cols(
+  country = [31mcol_character()[39m,
+  continent = [31mcol_character()[39m,
+  year = [32mcol_double()[39m,
+  lifeExp = [32mcol_double()[39m,
+  pop = [32mcol_double()[39m,
+  gdpPercap = [32mcol_double()[39m
+)
+"

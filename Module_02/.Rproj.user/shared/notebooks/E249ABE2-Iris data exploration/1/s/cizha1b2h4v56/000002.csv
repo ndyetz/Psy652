@@ -1,0 +1,12 @@
+"0",""
+"0","# I am going to import data into R"
+"0","iris_data <- read_csv(""iris.csv"")"
+"2","Parsed with column specification:
+cols(
+  ID = [32mcol_double()[39m,
+  Sepal.Length = [32mcol_double()[39m,
+  Sepal.Width = [32mcol_double()[39m,
+  Petal.Length = [32mcol_double()[39m,
+  Petal.Width = [32mcol_double()[39m
+)
+"

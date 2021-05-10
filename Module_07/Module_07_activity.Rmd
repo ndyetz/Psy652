@@ -1,0 +1,131 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Load libraries
+```{r}
+library(psych)
+library(broom)
+library(olsrr)
+library(tidyverse)
+```
+
+```{r}
+# generate some data
+set.seed(1870)
+height <- rnorm(n=50000, m=70, sd=3.00) # generate a population of 50,000 (Avg Height of Men in the United States)
+my_pop <- data.frame(height)
+meanpop <- mean(my_pop$height) # save the average height in the population -- our population mean
+
+```
+
+# Describe data 
+
+```{r}
+describe(my_pop)
+```
+
+
+
+
+### Create a histogram of the population
+
+```{r}
+# plot the normal distribution
+ggplot(my_pop, aes(x = height)) +
+  geom_histogram(binwidth = .30) +
+  labs(title = "Distribution of height for U.S. Men", subtitle = "simulation of a population", x = "Height")
+
+
+
+```
+
+
+
+# Randomly select 3 samples of size 100 from the population
+```{r}
+
+set.seed(19657)
+s1 <- sample_n(my_pop, 100, replace = TRUE)
+s2 <- sample_n(my_pop, 100, replace = TRUE)
+s3 <- sample_n(my_pop, 100, replace = TRUE)
+
+```
+
+
+# Describe each sample
+```{r}
+describe(s1)
+describe(s2)
+describe(s3)
+
+```
+
+
+
+
+
+
+# Inference for SLR
+## Simulate a population based on SLR results
+```{r}
+
+set.seed(83587)
+weight <- rnorm (mean = 197.0, sd = 1.2, n = 100000)
+
+b0 <- 0
+b1 <- 1
+
+sigma <- 1.0
+
+e <- rnorm(mean = 0, sd = sigma, n = 100000)
+
+height <- b0 + b1*weight + e
+
+my_regpop <- data.frame(weight, height)
+
+```
+
+
+
+
+```{r}
+# Generate some data 
+set.seed(83587) 
+weight <- rnorm (mean = 197.0, sd = 1.2, n = 50000) #Create weight var
+
+b0 <- 0 # Pop intercept
+b1 <- 1 # Pop slope
+sigma <- 1.0 # Pop SD
+
+e <- rnorm(mean = 0, sd = sigma, n = 50000) #generate error
+
+height <- b0 + b1*weight + e #pop equation
+
+my_regpop <- data.frame(weight, height) #Dataset
+
+```
+
+
+### Create scatterplot for population SLR
+```{r}
+
+ggplot(my_regpop, aes(x = weight, y = height)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "Scatterplot of Weight and Height", x = "Weight", y = "Height")
+
+```
+
+# Fit an SLR to the population
+```{r}
+popmod <- lm(height ~ weight, data = my_regpop)
+ols_regress(popmod)
+```
+
+
+
+
+
+

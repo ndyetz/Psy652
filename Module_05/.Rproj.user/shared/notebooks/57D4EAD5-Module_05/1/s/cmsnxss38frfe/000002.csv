@@ -1,0 +1,13 @@
+"0","```r
+
+
+sex_happy <- select(gss_reduced, sex, happy)
+sex_happy_table <- table(sex_happy)
+
+sex_happy_table
+```"
+"1","        happy
+sex      HAPPY UNHAPPY
+  FEMALE    78      13
+  MALE      37      21
+"

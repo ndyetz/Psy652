@@ -1,0 +1,16 @@
+---
+title: "Copy and paste into your own R-notebook"
+output: html_notebook
+---
+
+```{r}
+##make sure the correlation matrix is arranged so the X variables come first##
+Cormat<-matrix(c(
+  1.00,.448,.696,.439,.495,
+  .448,1.00,.384,.282,.471,
+  .696,.384,1.00,.226,.428,
+  .439,.282,.226, 1.00,.222,
+  .495,.471,.428,.222,1.00),
+  ncol=ntot,byrow=TRUE)
+```
+

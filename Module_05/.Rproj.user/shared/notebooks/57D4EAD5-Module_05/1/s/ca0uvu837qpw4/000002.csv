@@ -1,0 +1,12 @@
+"0","```r
+
+sex_party <- select(gss_reduced, sex, party)
+sex_party_table <- table(sex_party)
+
+sex_party_table
+```"
+"1","        party
+sex      Dem Ind Rep
+  FEMALE  29  43  19
+  MALE    14  29  15
+"

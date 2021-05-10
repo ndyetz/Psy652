@@ -1,0 +1,4 @@
+"0",""
+"0","ggplot(data = gm, aes(x=lifeExp)) + "
+"0","  geom_density()"
+"0",""

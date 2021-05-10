@@ -1,0 +1,28 @@
+"0","```r
+oddsratio.wald(sex_happy_table, rev = \"columns\")
+```"
+"1","$data
+        happy
+sex      UNHAPPY HAPPY Total
+  FEMALE      13    78    91
+  MALE        21    37    58
+  Total       34   115   149
+
+$measure
+        odds ratio with 95% C.I.
+sex       estimate     lower     upper
+  FEMALE 1.0000000        NA        NA
+  MALE   0.2936508 0.1326513 0.6500561
+
+$p.value
+        two-sided
+sex       midp.exact fisher.exact  chi.square
+  FEMALE          NA           NA          NA
+  MALE   0.002490709  0.002588564 0.001878004
+
+$correction
+[1] FALSE
+
+attr(,\"method\")
+[1] \"Unconditional MLE & normal approximation (Wald) CI\"
+"

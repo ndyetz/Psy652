@@ -1,0 +1,10 @@
+"0","```r
+
+chisq.test(sex_party_table)
+```"
+"1","
+	Pearson's Chi-squared test
+
+data:  sex_party_table
+X-squared = 1.1742, df = 2, p-value = 0.5559
+"

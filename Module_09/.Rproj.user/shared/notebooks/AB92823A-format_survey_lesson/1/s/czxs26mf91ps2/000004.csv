@@ -1,0 +1,2 @@
+"0","survey <- survey %>% "
+"0","  filter(complete.cases(.))"

@@ -1,0 +1,62 @@
+---
+title: "R Notebook -- gapminder data exploration"
+output: 
+  html_notebook:
+    toc: yes
+---
+
+You can write whatever you want in the white space! 
+
+# A "#" at the beginning of a line in the white space creates a "header"!
+The beauty of headers will become apparent when you "Knit" your notebook (By pressing "Preview"). We use headers to indicate different sections of our notebook. We can also create subheaders by adding multiple "#" symbols next to each other. 
+
+For example: 
+
+## A "##" creates a level 2 subheader.
+Neat!
+
+### A "###" creates a level 3 subheader.
+Even Neater!
+
+# Load packages for this session
+Below I am going to load the tidyverse package. To do this, I will create a an "R-chunk". An R-chunk is a gray space that runs R code for me. To create an R-chunk, I click "Insert" then click "R", and a new R-chunk will be created below my cursor. 
+```{r}
+
+# Then, I can execute R code in this R-chunk I made. To execute the code, press the "Play" button on the top right corner of the gray space. 
+library(tidyverse)
+
+```
+
+
+# Import data 
+Below I will be importing my gapminder dataset into R. I will be naming it as a new object called "gm". The new object will appear in my environment (The upper right panel).
+```{r}
+
+gm <- read_csv("gapminder.csv")
+
+```
+
+
+# Summarize the variables
+```{r}
+
+summary(gm)
+
+```
+
+
+# Create a plot!
+```{r}
+
+ggplot(data = gm, aes(x=lifeExp)) + 
+  geom_density()
+
+```
+
+
+
+
+
+
+
+

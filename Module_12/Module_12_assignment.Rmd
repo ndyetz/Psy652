@@ -1,0 +1,121 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Load libraries
+```{r}
+library(psych)
+library(tidyverse)
+library(apaTables)
+library(car)
+library(lsr)
+library(MBESS)
+```
+
+# Import data
+```{r}
+slp <- read_csv("slpdata.csv")
+```
+
+# Factor the grouping variable
+```{r}
+slp <- mutate(slp, 
+              sex.f = factor(sex, 
+                                  levels = c(1,2),
+                                  labels = c("male", "female")),
+              cond.f = factor(cond, 
+                              levels = c(1,2,3),
+                              labels = c("self-help", "group-based", "group + partner")))
+```
+
+
+# Visualize the data
+## Create boxplots of sleep efficiency across treatment groups
+```{r}
+ggplot(slp, aes(y = sleep, color = cond.f)) +
+  geom_boxplot()
+
+```
+
+
+## Create boxplots of sleep efficiency across sex
+```{r}
+ggplot(slp, aes(y = sleep, color = sex.f)) +
+  geom_boxplot()
+```
+
+## Create boxplots of sleep efficiency across groups & sex
+```{r}
+ggplot(slp, aes(y = sleep, color = cond.f)) +
+  geom_boxplot() +
+  facet_wrap(~sex.f)
+```
+# Conduct Factorial ANOVA
+```{r}
+
+mod <- lm(sleep ~ sex.f*cond.f, data = slp)
+Anova(mod, type = 3)
+
+
+```
+
+# Output an APA styled ANOVA via apaTables' apa.aov.table() function
+```{r}
+apa.aov.table(mod, filename = "model.doc", conf.level = .95)
+```
+
+
+```{r}
+ci.pvaf(F.value = 115.44, df.1 = 1, df.2 = 594, N = 600, conf.level = .95)
+ci.pvaf(F.value = 113.84, df.1 = 2, df.2 = 594, N = 600, conf.level = .95)
+ci.pvaf(F.value =   3.79, df.1 = 2, df.2 = 594, N = 600, conf.level = .95)
+```
+
+
+# Run contrasts
+```{r}
+sc1 <- c(1,-1)
+
+cc1 <- c(1, -1, 0)
+cc2 <- c(1, 0, -1)
+
+contrasts(slp$sex.f) <- sc1
+contrasts(slp$cond.f) <- cbind(cc1, cc2)
+
+
+
+attributes(slp$sex.f)
+attributes(slp$cond.f)
+
+```
+
+
+# Run ANOVA with contrast statements
+```{r}
+mod_contrasts <- lm(sleep ~ sex.f*cond.f, data = slp)
+summary.lm(mod_contrasts)
+```
+
+# Optional interaction plots
+
+```{r}
+slp_grouped <- group_by(slp, sex.f, cond.f)
+slp_graph   <- summarize(slp_grouped, sleep = mean(sleep, na.rm = TRUE))
+slp_graph   <- ungroup(slp_graph)
+
+
+ggplot(slp_graph, aes(x = sex.f, y = sleep, color = cond.f)) +
+  geom_line(aes(group = cond.f)) 
+```
+
+
+
+```{r}
+interaction.plot(x.factor = slp$sex.f, trace.factor= slp$cond.f, response =slp$sleep, type="b")
+```
+
+
+
+
+

@@ -1,0 +1,5 @@
+"0","slp <- mutate(slp,"
+"0"," female = ifelse(sex == 1, 0, 1),"
+"0"," female.f = factor(female, levels = c(0,1), labels = c(""male"", ""female"")))"
+"0","slp <- mutate(slp, cond.f = factor(cond, levels = c(1,2,3), "
+"0","                                   labels = c(""self help"", ""group-based"", ""group + partner"")))"

@@ -1,0 +1,105 @@
+---
+title: "Answers"
+output: 
+  html_notebook:
+    toc: yes
+---
+
+# Load libraries
+```{r}
+library(tidyverse)
+library(epitools)
+```
+
+# Read in data
+```{r}
+slp <- read_csv("slp_cat.csv")
+```
+
+# Get structure of the data
+```{r}
+str(slp)
+```
+
+
+# Get sumary of data
+```{r}
+summary(slp)
+```
+
+# Factor variables
+```{r}
+slp <- mutate(slp, 
+              sex       = as.factor(sex),
+              cond      = as.factor(cond),
+              prior     = as.factor(prior),
+              sleep = as.factor(sleep)
+              )
+```
+
+
+# Get structure of data again
+```{r}
+str(slp)
+```
+
+
+# Get summary of data again
+```{r}
+summary(slp)
+```
+
+
+# Run a chi square of sex and sleep cat
+## Step 1: Create a table of your variable
+```{r}
+sex_sleep <- select(slp, sex, sleep)
+sex_sleep_table <- table(sex_sleep)
+
+sex_sleep_table
+```
+
+## Step 2: run chisq.test() on the new table object
+```{r}
+chisq.test(sex_sleep_table)
+```
+### Step 2.1: If significant, calculate the contigency coeffient effect size
+Results were significant (p <.05)
+```{r}
+# contingency coefficient = sqrt(X^2 / (X^2 + N))
+sqrt(82.564 / (82.564 + 600))
+```
+
+
+# Get odds ratio of our 2x2 table (sex_sleep_table)
+## First calculate it by hand
+### OR of Males being unhappy as compared to females
+
+```{r}
+# Get our table
+sex_sleep_table
+```
+```{r}
+
+#Calulate Odds for Males being happy
+males_bad <- 230 / 67
+
+# Calculate odds for males being unhappy
+males_good <- 123 / 180
+
+# Get the odds ratio
+OR <-  males_good / males_bad
+OR
+
+```
+Males are .19 times as likely to have good sleep as compared to females (meaning they are likely to have a worst sleep)
+
+### Then calculate it via oddsratio.wald()
+```{r}
+
+oddsratio.wald(sex_sleep_table)
+
+```
+
+Males are .19 times as likely to have good sleep as compared to females (meaning they are likely to have a worst sleep)
+

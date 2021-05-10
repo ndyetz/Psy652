@@ -1,0 +1,9 @@
+"0","```r
+# Get our table
+sex_happy_table
+```"
+"1","        happy
+sex      HAPPY UNHAPPY
+  FEMALE    78      13
+  MALE      37      21
+"

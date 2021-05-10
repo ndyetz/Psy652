@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1573688748329.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C5E7CE00",
+    "lastKnownWriteTime" : 3419473789575321445,
+    "last_content_update" : 1573688748329,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "4B948F3F",
+        "caption" : "stress",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=stress&cache_key=4B948F3F",
+        "displayedObservations" : 120,
+        "environment" : "",
+        "object" : "stress",
+        "preview" : 0,
+        "totalObservations" : 120,
+        "variables" : 4
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

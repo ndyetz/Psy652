@@ -1,0 +1,9 @@
+"0","```r
+chisq.test(sex_happy_table)
+```"
+"1","
+	Pearson's Chi-squared test with Yates' continuity correction
+
+data:  sex_happy_table
+X-squared = 8.4605, df = 1, p-value = 0.003629
+"

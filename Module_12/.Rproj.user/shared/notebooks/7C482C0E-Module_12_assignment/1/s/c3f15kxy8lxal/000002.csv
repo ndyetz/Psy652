@@ -1,0 +1,3 @@
+"0","ggplot(slp, aes(y = sleep, color = cond.f)) +"
+"0","  geom_boxplot() +"
+"0","  facet_wrap(~sex.f)"

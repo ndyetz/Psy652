@@ -1,0 +1,1 @@
+"0","aggregate(x=slp$sleep, by=list(slp$female.f, slp$cond.f), FUN=mean)"

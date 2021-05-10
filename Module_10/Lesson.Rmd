@@ -1,0 +1,64 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+# Load libraries
+```{r, message=FALSE}
+library(tidyverse)
+library(psych)
+library(olsrr)
+```
+
+
+
+# Import data
+```{r,message=FALSE}
+slp <- read_csv("slp_esteem.csv")
+```
+
+
+
+# Describe the data
+```{r,message=FALSE}
+describe(slp)
+```
+
+
+# Hierarchical Regression Practice
+
+## Build Reduced Model A
+```{r}
+mod_reda <- lm(data = slp, lifesat ~ hygiene)
+ols_regress(mod_reda)
+```
+
+```{r}
+mod_redb <- lm(data = slp, lifesat ~ hygiene + age)
+ols_regress(mod_redb)
+```
+
+
+## Build Reduced Model B
+```{r}
+mod_redc <- lm(data = slp, lifesat ~  hygiene + age + sleep)
+ols_regress(mod_redc)
+```
+
+## Build Full model
+```{r}
+mod_full <- lm(data = slp, lifesat ~ age + hygiene + sleep + self_esteem)
+ols_regress(mod_full)
+```
+
+## Compare Reduced and Full Models
+
+### Statistically compare model fit
+```{r}
+anova(mod_reda, mod_redb, mod_redc, mod_full)
+# list the most reduced model first, followed by the second-most reduced model, followed by the full model
+```
+
+

@@ -1,0 +1,164 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+# Load libraries
+```{r, message = FALSE}
+library(tidyverse)
+library(psych)
+library(car)
+library(lsr)
+library(MBESS)
+library(apaTables)
+```
+
+
+
+
+
+
+# Import Data
+```{r, message = FALSE}
+
+diet <- read_csv("Diet.csv")
+
+```
+
+
+# Factor grouping variables
+```{r}
+diet <- mutate(diet,
+  gender.f = factor(gender, levels = c(0,1), labels = c("female", "male")))
+
+diet <- mutate(diet, Diet.f = factor(Diet, levels = c(1,2,3), 
+                                   labels = c("Control", "Atkins", "Nutrisystem")))
+```
+
+
+# Select variables of interest 
+```{r}
+diet_reduced <- select(diet, gender.f, Diet.f, weightLOST)
+```
+
+
+# Calculate descriptives
+# For whole dataset
+```{r}
+describe(diet_reduced)
+```
+
+
+```{r}
+diet_grouped <- group_by(diet_reduced,  gender.f, Diet.f)
+summarize(diet_grouped, mean_weightLOST = mean(weightLOST))
+```
+
+
+# Visualize the data
+## Create boxplots of weightloss across gender
+```{r}
+ggplot(diet_reduced, aes(y = weightLOST, color = gender.f)) +
+  geom_boxplot() 
+
+```
+
+
+
+## Create boxplots of weightloss across diet types
+```{r}
+ggplot(diet_reduced, aes(y = weightLOST, color = Diet.f)) +
+  geom_boxplot() 
+
+```
+
+
+
+## Create boxplots of weightloss across diet groups and gender
+```{r}
+ggplot(diet_reduced, aes(y = weightLOST, color = Diet.f)) +
+  geom_boxplot() +
+  facet_wrap(~gender.f)
+
+```
+
+
+
+
+# Conduct a factorial ANOVA
+```{r}
+model <- lm(weightLOST ~ gender.f*Diet.f, data = diet_reduced)
+Anova(model, type = 3)
+```
+
+
+# View and output ANOVA table via apaTables's apa.aov.table()
+```{r}
+apa.aov.table(model, filename = "model.doc", conf.level = .95)
+```
+
+
+## Calculate 95% CIs
+### gender.f
+```{r}
+
+ci.pvaf(F.value = 24.43, df.1 =1, df.2 = 72, N = 78, conf.level = .95)
+
+```
+
+### Diet.f
+```{r}
+ci.pvaf(F.value =  10.14, df.1 =2, df.2 = 72, N = 78, conf.level = .95)
+```
+
+
+### gender.f*Diet.f
+```{r}
+ci.pvaf(F.value =  3.79, df.1 =2, df.2 = 72, N = 78, conf.level = .95)
+```
+
+
+## Interaction plot
+```{r}
+
+diet_grouped <- group_by(diet_reduced, gender.f, Diet.f)
+diet_graph <- summarize(diet_grouped, weightLOST = mean(weightLOST))
+diet_graph <- ungroup(diet_graph)
+
+
+ggplot(diet_graph, aes(x = gender.f, y = weightLOST, color = Diet.f)) +
+  geom_line(aes(group = Diet.f)) + 
+  scale_y_continuous(limits = c(0,6)) +
+  labs(title = "Interaction plot", subtitle = "WeightLOST by Gender & Diet") 
+
+  
+
+```
+
+
+
+## Set up contrasts
+```{r}
+
+#Contrasts for gender
+gc1 <- c(-1,1)
+
+#Contrasts for diet type
+dc1 <- c(1,-1,0)
+dc2 <- c(1,0,-1)
+
+
+contrasts(diet_reduced$gender.f) <- gc1
+contrasts(diet_reduced$Diet.f)   <- cbind(dc1, dc2)
+```
+
+
+### summary.lm()
+```{r}
+
+model_contrasts <- lm(weightLOST ~ gender.f*Diet.f, data = diet_reduced)
+summary.lm(model_contrasts)
+```
+

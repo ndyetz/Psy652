@@ -1,0 +1,17 @@
+"0","```r
+summary(gss_reduced, maxsum = 12)
+```"
+"1","       id           sex         happy             zodiac   party   
+ Min.   :   6   FEMALE:91   HAPPY  :115   AQUARIUS   :12   Dem:43  
+ 1st Qu.: 841   MALE  :58   UNHAPPY: 34   ARIES      :10   Ind:72  
+ Median :1502                             CANCER     :13   Rep:34  
+ Mean   :1469                             CAPRICORN  :15           
+ 3rd Qu.:2137                             GEMINI     :12           
+ Max.   :2829                             LEO        :15           
+                                          LIBRA      :11           
+                                          PISCES     : 8           
+                                          SAGITTARIUS: 9           
+                                          SCORPIO    :14           
+                                          TAURUS     :12           
+                                          VIRGO      :18           
+"

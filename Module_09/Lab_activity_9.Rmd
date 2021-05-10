@@ -1,0 +1,89 @@
+---
+title: "Module 9 Lab activity"
+output:
+  html_notebook:
+    toc: yes
+  html_document:
+    df_print: paged
+    toc: yes
+---
+
+
+# load libraries
+```{r, message= FALSE}
+library(psych)
+library(tidyverse)
+
+```
+
+# Import data
+```{r}
+
+bac_obs <- read_csv("bac_obs.csv")
+
+```
+
+# Mutate BAC
+```{r}
+bac_obs <- mutate(bac_obs, bac100 = bac*100)
+```
+
+
+# Select variables of interest
+```{r}
+bac_reduced <- select(bac_obs, bac100, weight, alc_gm, typ_drks, alcexp)
+```
+
+
+
+# Describe the data
+```{r}
+
+describe(bac_reduced)
+
+```
+
+
+
+# Get Sccatterplot matrix
+```{r}
+cor(bac_reduced)
+```
+
+
+
+# Fit Regression
+
+## Regress bac on weight & typ_drks
+```{r}
+m2 <- lm( bac100 ~ weight + typ_drks, data = bac_reduced)
+summary(m2)
+```
+
+```{r}
+8.56 + (-.068 * 70) + (.093  * 27)
+
+6.311/100
+```
+
+
+
+## Regress bac on alc_gm and alc_gm
+```{r}
+m3 <- lm(bac100 ~ alc_gm + typ_drks, data = bac_reduced)
+summary(m3)
+```
+
+
+## Regress bac on weight and alc_gm
+```{r}
+m3 <- lm(bac100 ~ alc_gm + weight + typ_drks + alcexp, data = bac_reduced)
+summary(m3)
+```
+
+
+```{r}
+(8.562710 + (70*-0.067856) + (27*0.093222)) / 100
+```
+
+

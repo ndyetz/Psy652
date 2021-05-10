@@ -1,0 +1,2 @@
+"0","ggplot(gm, aes(x = continent, fill = continent)) + geom_bar() + "
+"0","  labs(title = ""How many data points do we have for each continent?"", subtitle = ""That's pretty neat!"")"

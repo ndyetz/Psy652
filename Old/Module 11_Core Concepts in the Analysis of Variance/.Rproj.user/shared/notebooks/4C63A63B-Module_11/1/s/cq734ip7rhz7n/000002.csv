@@ -1,0 +1,8 @@
+"0","stress <- read_csv(""StressReduction.csv"")"
+"2","Parsed with column specification:
+cols(
+  Program = [31mcol_character()[39m,
+  ProgramCode = [32mcol_double()[39m,
+  StressLevel = [32mcol_double()[39m
+)
+"

@@ -1,0 +1,139 @@
+---
+title: "R Notebook"
+output: 
+  html_notebook:
+    toc: yes
+---
+
+
+# The problem
+Suppose you ﬁnd a study that provides correlations between measures of academic qualiﬁcations (X1=HS GPA, X2 = SAT Math, X3 = SAT EBRW) and two measures of college success (Y1=college GPA, Y2 = GPA in math courses)
+
+
+The Correlations Among Tests and success measures
+
+```
+        X1      X2         X3     Y1      Y2
+ X1     1.000   0.448   0.485   0.425    0.555 
+ X2     0.448   1.000   0.333   0.283    0.423
+ X3     0.485    0.333   1.000  0.266    0.337 
+ Y1     0.425    0.283   0.266  1.000    0.111
+ Y2     0.555   0.423    0.337  0.111    1.000
+
+```
+
+# Steps to solve the problem
+## Step 1: Define the number of X & Y variables
+```{r}
+# We have 3 x's. Save it into an object called "nx"
+nx <- 3
+
+# We have 2 Y Variables. Save it into an object called "ny"
+ny <- 2
+
+```
+
+## Step 2: Add in calculations to help R Identify start and end points
+```{r}
+#First, allow R to identify how many columns in total there are (which is nx + ny):
+
+ntot <- nx + ny
+
+#Then tell R where the Y variables start (nx + 1)
+firsty <- nx + 1
+
+
+```
+
+
+
+## Step 3: enter the weights for the criteria and tests
+```{r}
+# Criterion weight (The weight for the Y variables)
+Cweight<-matrix(c(1.0,1.0),ncol=1,byrow=T)
+
+# Test weights (The X variable weights)
+Tweight<-matrix(c(1.0,1.0,1.0),ncol=1,byrow=T)
+
+```
+We will be using these to calculate weights later 
+
+
+## Step 4: we create the matrix
+```{r}
+##make sure the correlation matrix is arranged so the X variables come first##
+Cormat<-matrix(c(1.00,.448,.485,.425,.555,
+                 .448,1.00,.333,.283,.423,
+                 .485,.333,1.00,.266,.337,
+                 .425,.283,.266, 1.00,.111,
+                 .555,.423,.337,.111,1.00),
+               ncol=5,byrow=TRUE)
+```
+
+### View the matrix (and its parts)
+A bracket after an object is known as "indexing" a variable.
+The left side of the comma is rows. The right side of the comma is columns.
+```{r}
+Rxx<-Cormat[1:nx,1:nx] # Just the X variables
+
+Ryy<-Cormat[firsty:ntot,firsty:ntot] # Just the y variables
+
+Rxy<-Cormat[1:nx,firsty:ntot]
+
+##display the correlation matrix##
+Cormat
+```
+## Step 5: Separate the X & Y variables
+### X variables correlated with themselves
+```{r}
+Rxx # Just the X variables
+```
+
+
+### Y variables correlated with them selves
+```{r}
+Ryy # Just the y variables
+
+```
+
+### X variables correlated with the Y variables
+```{r}
+##display Rxy##
+Rxy
+```
+
+
+
+![](D:\Class_Folder\Fall 2020\Psy_652\Module_08\multivar equation.PNG)
+
+
+
+## Step 6: Calculate the multivariate correlation (Equation on slide 17)
+```{r}
+###create transpose of each of these vectors###
+CweightT<-t(Cweight)
+TweightT<-t(Tweight)
+
+###calculate the numerator of the equation for the multivariate validity of this composite###
+numer<- TweightT %*% Rxy %*% Cweight
+
+###calculate denominator of the equation for the multivariate validity of this composite###
+vary<- CweightT %*% Ryy %*% Cweight
+varx<- TweightT %*% Rxx %*% Tweight
+denom<-sqrt(vary) * sqrt(varx)
+
+###multivariate validity is simply numerator over denominator###
+Multval<- numer/denom
+```
+### View the multivariate correlation
+```{r}
+Multval
+```
+
+
+
+
+
+
+
+

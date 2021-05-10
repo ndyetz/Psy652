@@ -1,0 +1,61 @@
+---
+title: "R Notebook for PSY 652 Module 10 Lab: Hierarchical Regression Practice"
+subtitle: Gemma Wallace & Neil Yetz
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  html_notebook:
+    toc: yes
+---
+
+# Load libraries
+```{r, message=FALSE}
+library(tidyverse)
+library(psych)
+library(olsrr)
+```
+
+# Import data
+```{r,message=FALSE}
+obs <- read_csv("bac_obs.csv")
+```
+
+# Describe the data
+```{r,message=FALSE}
+describe(obs)
+```
+
+# Mutate bac variable
+```{r}
+obs <- mutate(obs, bac100 = bac*100)
+```
+
+# Hierarchical Regression Practice
+
+## Build Reduced Model A
+```{r}
+mod_reda <- lm(data = obs, bac100 ~ typ_drks + alc_gm)
+ols_regress(mod_reda)
+```
+
+## Build Reduced Model B
+```{r}
+mod_redb <- lm(data = obs, bac100 ~ typ_drks + alc_gm + weight)
+ols_regress(mod_redb)
+```
+
+## Build Full Model
+```{r}
+mod_full<- lm(data = obs, bac100 ~ typ_drks + alc_gm + weight + alcexp)
+ols_regress(mod_full)
+```
+
+## Compare Reduced and Full Models
+
+### Statistically compare model fit
+```{r}
+anova(mod_reda, mod_redb, mod_full, test = "F")
+# list the most reduced model first, followed by the second-most reduced model, followed by the full model
+```
+

@@ -1,0 +1,86 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Load libraries
+```{r, message = FALSE}
+library(tidyverse)
+library(psych)
+library(car)
+library(lsr)
+library(MBESS)
+```
+
+# Import Data
+```{r, message = FALSE}
+
+slp <- read_csv("slpdata.csv")
+
+```
+
+
+# Factor grouping variables
+```{r}
+slp <- mutate(slp,
+ female = ifelse(sex == 1, 0, 1),
+ female.f = factor(female, levels = c(0,1), labels = c("male", "female")))
+
+slp <- mutate(slp, cond.f = factor(cond, levels = c(1,2,3), 
+                                   labels = c("self help", "group-based", "group + partner")))
+```
+
+
+
+
+# Calculate descriptives
+# For whole dataset
+```{r}
+describe(slp)
+```
+
+## Summarize descriptives grouping variables
+```{r}
+aggregate(x=slp$sleep, by=list(slp$female.f, slp$cond.f), FUN=mean)
+```
+
+
+# Visualize the data
+## Create boxplots of sleep efficiency across treatment groups
+```{r}
+ggplot(slp, aes(y = sleep, color = cond.f)) +
+  geom_boxplot() 
+
+```
+## Create boxplots of sleep efficiency across treatment groups and sex
+```{r}
+ggplot(slp, aes(y = sleep, color = cond.f)) +
+  geom_boxplot() +
+  facet_wrap(~female.f)
+```
+
+
+# Conduct a factorial ANOVA
+```{r}
+model <- lm(sleep ~ female.f + cond.f + female.f*cond.f, data = slp)
+Anova(model, type = 3)
+```
+
+## Calculate effect sizes
+```{r}
+
+etaSquared(model, type = 3, anova = FALSE)
+```
+```{r}
+
+
+ci.pvaf(F.value = 115.4370, df.1 =1, df.2 = 594, N = 600, conf.level = .95)
+ci.pvaf(F.value = 113.8443, df.1 =2, df.2 = 594, N = 600, conf.level = .95)
+ci.pvaf(F.value = 3.7865,   df.1 =2, df.2 = 594, N = 600, conf.level = .95)
+
+
+```
+
+

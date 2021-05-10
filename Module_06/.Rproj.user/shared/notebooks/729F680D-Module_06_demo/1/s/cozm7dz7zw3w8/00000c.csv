@@ -1,0 +1,3 @@
+"0","ggplot(bac_reduced, aes(x = alc_gm, y = bac)) +"
+"0","  geom_point() +"
+"0","  geom_smooth(method = ""lm"")"

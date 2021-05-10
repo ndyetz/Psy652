@@ -1,0 +1,2 @@
+"0","#install.packages(""pwr"")"
+"0","library(pwr)"

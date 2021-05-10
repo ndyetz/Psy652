@@ -1,0 +1,95 @@
+---
+title: 'R Notebook for: Matrix Algebra Practice'
+output:
+  html_notebook:
+    toc: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '5'
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '5'
+---
+
+
+```{r}
+#Clear environment
+rm(list=ls())
+```
+
+
+# Step 1: Define the number of X & Y variables 
+```{r}
+nx <- 3
+ny <- 2
+```
+
+
+# Step 2: Add in calculations to help R identify start & end points
+```{r}
+ntot <- nx + ny
+firsty <- nx + 1
+```
+
+# Step 3: Enter the weights for the criterion (Y variables) and test (X variables)
+```{r}
+
+Cweight<-matrix(c(1.0,1.0),ncol=1,byrow=T)
+Tweight<-matrix(c(1.0,1.0,1.0),ncol=1,byrow=T)
+
+
+```
+
+# Step 4: Create the matrix
+```{r}
+Cormat<-matrix(c(
+  1.00,.448,.696,.439,.495,
+  .448,1.00,.384,.282,.471,
+  .696,.384,1.00,.226,.428,
+  .439,.282,.226, 1.00,.222,
+  .495,.471,.428,.222,1.00),
+  ncol=ntot, byrow=TRUE)
+```
+
+
+# Step 4.1: Separate the matrix into its corresponding parts
+```{r}
+
+Rxx <- Cormat[1:nx,1:nx]
+Ryy <- Cormat[firsty:ntot,firsty:ntot]
+Rxy<-Cormat[1:nx,firsty:ntot]
+
+```
+
+# Step 5: Calculate the multivariate statistic
+```{r}
+###create transpose of each of these vectors###
+CweightT <-t(Cweight)
+TweightT<-t(Tweight)
+
+###calculate the numerator of the equation for the multivariate validity of this composite###
+numer<- TweightT %*% Rxy %*% Cweight
+
+###calculate denominator of the equation for the multivariate validity of this composite###
+vary<- CweightT %*% Ryy %*% Cweight
+varx<- TweightT %*% Rxx %*% Tweight
+denom<-sqrt(vary) * sqrt(varx)
+
+###multivariate validity is simply numerator over denominator###
+Multval<- numer/denom
+
+Multval
+
+```
+
+
+
+
+
+
+
+
+
+
+

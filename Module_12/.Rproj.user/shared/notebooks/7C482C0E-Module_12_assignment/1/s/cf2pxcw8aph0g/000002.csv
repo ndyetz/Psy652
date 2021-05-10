@@ -1,0 +1,9 @@
+"0","slp_grouped <- group_by(slp, sex.f, cond.f)"
+"0","slp_graph   <- summarize(slp_grouped, sleep = mean(sleep, na.rm = TRUE))"
+"2","`summarise()` regrouping output by 'sex.f' (override with `.groups` argument)
+"
+"0","slp_graph <- ungroup(slp_graph)"
+"0",""
+"0",""
+"0","ggplot(slp_graph, aes(x = sex.f, y = sleep, color = cond.f)) +"
+"0","  geom_line(aes(group = cond.f))"

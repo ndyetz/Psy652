@@ -1,0 +1,3 @@
+"0","#Get the mean of the lifeExp variable."
+"0",""
+"0","summarize(gm, avg_lifeExp = mean(lifeExp, na.rm = TRUE))"

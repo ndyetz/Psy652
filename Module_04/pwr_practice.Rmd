@@ -1,0 +1,58 @@
+---
+title: "pwr practice"
+output: html_notebook
+---
+
+# Load libraries
+```{r}
+#install.packages("pwr")
+library(pwr)
+```
+
+
+# a-priori t-tets
+```{r}
+pwr.t.test(
+  n = NULL, 
+  d = .12, 
+  sig.level = .05, 
+  power = .80, 
+  type = "two.sample", 
+  alternative = "two.sided"
+  )
+```
+
+#a-priori ANOVA
+```{r}
+pwr.anova.test(
+  k = 3,
+  n = NULL,
+  f = .15,
+  sig.level = .05,
+  power = .80
+  )
+```
+
+
+# Post hoc t-test
+```{r}
+pwr.t.test(
+  n = 200, 
+  d = .25, 
+  sig.level = .01, 
+  power = NULL, 
+  type = "two.sample", 
+  alternative = "two.sided"
+  )
+```
+
+# Post-hoc ANOVA
+```{r}
+pwr.anova.test(
+  k = 5,
+  n = 50,
+  f = .10,
+  sig.level = .05,
+  power = NULL
+  )
+```

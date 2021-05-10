@@ -1,0 +1,1 @@
+"0","interaction.plot(x.factor = slp$sex.f, trace.factor= slp$cond.f, response =slp$sleep, type=""b"")"

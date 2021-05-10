@@ -1,0 +1,7 @@
+"0","ggplot(gm, aes(x = gdpPercap, y = lifeExp)) +"
+"0","  geom_point() +"
+"0","  geom_smooth(method = ""lm"") +"
+"0","  facet_wrap(~ continent) +"
+"0","  scale_x_log10() +"
+"0","  labs(title = ""This is the title of my chart"", "
+"0","       subtitle = ""Here is my subtitle"")"

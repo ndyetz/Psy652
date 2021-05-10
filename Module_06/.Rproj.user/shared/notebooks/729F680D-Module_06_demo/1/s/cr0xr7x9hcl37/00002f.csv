@@ -1,0 +1,7 @@
+"0","ggplot(bac_reduced, aes(x = alc_gm, y = bac)) +"
+"0","  geom_point() +"
+"0","  geom_smooth(method = ""lm"", fullrange = TRUE) + "
+"0","  scale_x_continuous(limits = c(-1, 60)) +"
+"0","  scale_y_continuous(limits = c(0, .15)) +"
+"0","  geom_vline(xintercept = 0, color = ""red"") +"
+"0","  geom_hline(yintercept = .003, color = ""red"")"

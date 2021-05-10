@@ -1,0 +1,3 @@
+"0","indo <- gm %>%"
+"0","  filter(country == ""Indonesia"") %>%"
+"0","  select(year, lifeExp, country)"

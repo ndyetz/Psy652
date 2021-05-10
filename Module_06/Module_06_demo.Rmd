@@ -1,0 +1,116 @@
+---
+title: "Module 6 Demo"
+output: 
+  html_notebook:
+    toc: yes
+---
+
+
+# Load Libraries
+```{r,message=FALSE}
+library(ppcor)
+library(psych)
+library(tidyverse)
+library(olsrr)
+library(apaTables)
+```
+
+# read in data
+```{r}
+bac_a <- read_csv("bac_a.csv")
+bac_b <- read_csv("bac_b.csv")
+
+```
+
+# Join (merge) our datasets
+```{r}
+
+bac_joined <- left_join(bac_a, bac_b, by = "id")
+
+```
+
+
+# select variables of interest
+```{r}
+bac_reduced <- select(bac_joined, weight, alc_gm, bac)
+```
+
+
+# Describe the data
+```{r}
+describe(bac_reduced)
+```
+
+
+
+# Make a scatterplot
+```{r}
+ggplot(bac_reduced, aes(x = alc_gm, y = bac)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+
+# Get correlation of variables
+## Via cor() function
+```{r}
+cor(bac_reduced)
+```
+
+## apa.cor.table()
+```{r}
+apa.cor.table(bac_reduced, "bac_correlations.doc", show.conf.interval = TRUE)
+```
+
+## Get partial correlation
+```{r}
+
+pcor.test(x = bac_reduced$alc_gm, y = bac_reduced$bac, z = bac_reduced$weight)
+
+```
+
+
+
+## Get semipartial correlation
+```{r}
+
+spcor.test(x = bac_reduced$alc_gm, y = bac_reduced$bac, z = bac_reduced$weight)
+
+```
+
+
+
+# Fit a Simple Linear Regression (SLR) Model
+```{r}
+mod1 <- lm(bac ~ alc_gm, data = bac_reduced)
+```
+
+
+## Display SLR model results
+### Via olsrr's ols_regress function
+```{r}
+ols_regress(mod1)
+```
+# Plot the regression
+## Simple plot
+```{r}
+ggplot(bac_reduced, aes(x = alc_gm, y = bac)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+
+## Complex plot for intercept proof
+```{r}
+ggplot(bac_reduced, aes(x = alc_gm, y = bac)) +
+  geom_point() +
+  geom_smooth(method = "lm", fullrange = TRUE) +
+  scale_x_continuous(limits = c(-1, 60)) +
+  scale_y_continuous(limits = c(0, .15)) +
+  geom_vline(xintercept = 0, color = "red") +
+  geom_hline(yintercept = .003, color = "red") +
+  annotate(geom = "text", x = 6.8, y = .003, label = "<- Intercept = .003")
+
+
+```
+

@@ -1,0 +1,16 @@
+"0","survey <- read_csv(""Class_Survey.csv"")"
+"2","Parsed with column specification:
+cols(
+  .default = col_double(),
+  gender = [31mcol_character()[39m,
+  hand = [31mcol_character()[39m,
+  year = [31mcol_character()[39m,
+  interest = [31mcol_character()[39m,
+  grad = [31mcol_character()[39m,
+  firstmajor = [31mcol_character()[39m,
+  photos = [31mcol_character()[39m,
+  honesty = [31mcol_character()[39m
+)
+"
+"2","See spec(...) for full column specifications.
+"

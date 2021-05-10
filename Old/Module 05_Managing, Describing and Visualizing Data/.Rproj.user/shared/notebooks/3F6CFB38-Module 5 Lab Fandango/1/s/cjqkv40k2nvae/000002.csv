@@ -1,0 +1,4 @@
+"0","```r
+fandango_year <- group_by(fandango,year)
+summarize(fandango_year, year_mean = mean(stars))
+```"

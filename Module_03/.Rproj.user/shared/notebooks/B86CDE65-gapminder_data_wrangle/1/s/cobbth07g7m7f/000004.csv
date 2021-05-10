@@ -1,0 +1,2 @@
+"0","ggplot(gm, aes(x = gdpPercap, y = lifeExp)) +"
+"0","  geom_point()"

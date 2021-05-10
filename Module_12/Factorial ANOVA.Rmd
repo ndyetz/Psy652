@@ -1,0 +1,153 @@
+---
+title: "Factorial ANOVA"
+output: 
+  html_notebook:
+    toc: yes
+ 
+  
+---
+# Load Libraries 
+
+```{r}
+library(psych)
+library(tidyverse)
+library (apaTables)
+library(car)
+install.packages("lsr")
+library(lsr)
+library(MBESS)
+```
+
+# Import data
+
+```{r}
+slp<-read.csv("slpdata.csv")
+```
+# Factor the grouping variables
+```{r}
+slp <- mutate(slp, 
+                 sex.f = factor(sex,
+                                   levels = c(2,1),
+                                   labels = c("female", "male")))
+slp <- mutate(slp, 
+              cond.f = factor(cond,
+                              levels = c(1,2,3),
+                              labels = c("self-help", "group-based", "group + partner")))
+```
+
+# Calculate descriptives
+## For whole dataset
+
+```{r}
+describe(slp)
+```
+
+## Descriptives by grouping variables
+```{r}
+slp_grouped <- group_by(slp, cond.f, sex.f)
+summarize(slp_grouped, mean_sleep = mean(sleep, na.rm = TRUE))
+```
+# Visualize the data
+## Create boxplots of sleep efficiency across treatment groups
+```{r}
+ggplot(slp, aes(y = sleep, color = cond.f)) + geom_boxplot()
+```
+## Create boxplots of sleep efficiency across sex
+```{r}
+ggplot(slp, aes(y=sleep, color = sex.f)) + geom_boxplot()
+```
+## Create boxplots of sleep efficiency across treatment groups and sex
+```{r}
+ggplot(slp, aes(y=sleep, color = cond.f)) + geom_boxplot() + facet_wrap(~sex.f)
+```
+# Conduct a factorial ANOVA
+
+```{r}
+model <-lm(sleep~ cond.f + sex.f + cond.f*sex.f, data = slp)
+Anova(model, type = 3)
+```
+The F statistic for each predictor and the interaction is significant.
+# Output the model in apaTables
+```{r}
+apa.aov.table(model, filename = "Table1.doc", conf.level = .95)
+```
+The partial eta squared is .14 for condition, .16 for sex, and .01 for the interaction of the two. Partial eta squared is an effect size.
+
+# Calculate partial eta^2 confidence intervals via MBESS' ci.pvaf() function
+## for sex.f
+```{r}
+ci.pvaf(F.value = 49.33, df.1 = 1, df.2 = 594, N = 600, conf.level = .95)
+```
+## for cond.f
+```{r}
+ci.pvaf(F.value = 115.437, df.1=2, df.2 = 594, N = 600, conf.level = .95)
+```
+## Cond.f*sex.f
+```{r}
+ci.pvaf(F.value = 3.7865, df.1=2, df.2 = 594, N = 600, conf.level = .95)
+```
+# Create an interaction plot
+```{r}
+slp_grouped<-group_by(slp, sex.f, cond.f)
+slp_graph <-summarize(slp_grouped, sleep = mean(sleep))
+slp_graph <-ungroup(slp_grouped)
+
+ggplot(slp_graph, aes(x= sex.f, y = sleep, color = cond.f)) + geom_line(aes(group = cond.f)) + 
+  scale_y_continuous(limits = c(25,100)) +
+  labs(title = "Interaction plot", subtitle = "sleep by Sex and Condition")
+```
+
+# Set up contrasts
+## Compare male (1) to female (-1)
+```{r}
+#sex
+sc1<- c(1,-1)
+contrasts(slp$sex.f)<-sc1
+
+```
+
+## Compare self-help(1) to group-based(-1)
+```{r}
+cc1<- c(1,-1, 0)
+```
+## Compare self-help(1) to group-based+partner(-1)
+```{r}
+cc2<- c(1, 0, -1)
+
+contrasts(slp$cond.f)<-cbind(cc1,cc2)
+```
+
+# Run ANOVA with contrast statements
+## summary.lm() to analyze constructs
+
+```{r}
+model_contrasts <- lm(sleep ~sex.f*cond.f, data = slp)
+summary.lm(model_contrasts)
+```
+GM = 69.83 is different from 0.
+There is a significant difference between males and females. There is no significant difference between self help and group based conditions. There is a significant difference between self help and group based + partner. There is no difference based on sex between self-help and group based groups.
+There is a difference based on sex between self-help and group based + parter groups.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

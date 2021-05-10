@@ -1,0 +1,3 @@
+"0","ggplot(gm, aes(x = lifeExp)) + "
+"0","  geom_histogram(fill = ""dark green"") +"
+"0","  labs(title = ""This is my title"", subtitle = ""This is my subtitle"")"

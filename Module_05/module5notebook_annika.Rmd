@@ -1,0 +1,82 @@
+---
+title: "Category_variables_notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: 
+    toc:yes
+---
+#Load libraries
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+
+install.packages("epitools")
+library(epitools)
+```
+#Import data
+```{r}
+slp<- read.csv("slp_cat.csv")
+```
+#See structure of data frame
+```{r}
+str(slp)
+```
+#Get a summary of the dataset
+```{r}
+summary(slp)
+```
+My variables are in character format and I need
+to convert them to factors
+
+#factor the variables via mutate
+```{r}
+slp <- mutate(slp, 
+              sex=as.factor(sex),
+              cond=as.factor(cond),
+              prior=as.factor(prior),
+              sleep=as.factor(sleep))
+```
+#See the structure of the dataset again
+```{r}
+str(slp)
+```
+#Get a summary of the dataset again
+```{r}
+summary(slp)
+```
+
+#Run a chi-square of sex and sleep variables
+##Step 1: Create a frequency table of your variable
+```{r}
+sex_sleep <- select(slp, sex, sleep)
+```
+
+
+```{r}
+sleep_sex_table <- table(sex_sleep)
+
+sleep_sex_table
+```
+
+## run chisq.test() on the new frequency table object
+```{r}
+chisq.test(sleep_sex_table)
+```
+There is a significant difference between groups as the P value is less that .05
+##Step 2.1: Calculate the contingency coefficient effect size
+```{r}
+sqrt(82.564 / (82.564 + 600))
+```
+This means there is a moderate effect size; not a huge difference between groups
+
+#Get odds ratio of our sex_sleep_table
+##calcuate by hand
+
+.199
+
+#Calculate it via oddsratio.wald() from the epitools package
+```{r}
+oddsratio.wald(sleep_sex_table)
+```
+

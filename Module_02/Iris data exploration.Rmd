@@ -1,0 +1,57 @@
+---
+title: "Iris data exploration"
+output: 
+  html_notebook:
+    toc: yes
+---
+
+# Load packages
+```{r}
+library(tidyverse)
+library(psych)
+```
+
+# Import data
+```{r}
+
+# I am going to import data into R
+iris_data <- read_csv("iris.csv")
+
+```
+
+#View the names of the dataframe
+```{r}
+names(iris_data)
+```
+
+# See the structure of the dataframe
+```{r}
+str(iris_data)
+```
+
+
+
+# Examine descriptives using the summary function
+```{r}
+summary(iris_data)
+```
+
+# Examine descriptives using the describe function from the psych package
+```{r}
+describe(iris_data)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,239 @@
+---
+title: "gapminder data wrangling and visualization"
+output: 
+  html_notebook:
+    toc: yes
+---
+
+
+# Load libraries
+```{r}
+library(tidyverse)
+```
+
+
+# Read in data
+```{r}
+
+gm <- read_csv("gapminder.csv")
+
+```
+
+# filter() the dataset
+
+There are many ways to filter data. To filter data, we use "logical operators" within the filter() function. 
+
+a.	 `==` Which means “Is exactly equal to”
+b.	`!=` Which means “Is NOT equal to”
+c.	`>` Which means “Is greater than”
+d.	`<` Which means “Is less than”
+e.	`>=` Which means “Is greater than OR equal to”
+f.	`<=` Which means “Is less than OR equal to”
+g.	`is.na()` Which means “Contains an NA value”.
+h.	`!is.na()` Which means “Does NOT contain an NA value”
+i.	`%%` - is called a “modulo”, which means “Has a remainder of” (It’s not used as much, but is actually very useful)
+
+
+```{r}
+
+#Filter to only years greater than 1970
+filter1 <- filter(gm, year > 1970)
+
+#Filter to when year is 2007 & continent is Asia. A "&" means AND!
+filter2 <- filter(gm, year == 2007 & continent == "Asia")
+
+#Filter to only include data where the continent is "Americas" OR "Europe"
+filter3 <- filter(gm, continent == "Americas" | continent == "Europe")
+
+
+```
+
+
+# select() the dataset
+
+We use the select function to choose columns in our dataset.
+
+```{r}
+
+#Keep only country, year, lifExp
+select1 <- select(gm, country, year, lifeExp)
+
+# Remove just one of the variables (And keep the rest)
+select2 <- select(gm, -lifeExp)
+
+#select() is also great for just rearranging variables. putting "everything()" at the end of the function tells select you want to keep all of the variables. 
+select3 <- select(gm, country, continent, gdpPercap, everything())
+
+```
+
+
+# mutate() the dataset
+
+We use the mutate() function to create new variables or modify existing variables. 
+
+We can multiply variables (*)  
+We can divide variables (/)  
+We can add variables (+)  
+We can subtract variables (-)  
+We can exponentiate variables (**)  
+
+```{r}
+
+
+
+
+#Multiply gdpPercap and population. Save it into a new variable called "gdp"
+mutate1 <- mutate(gm, gdp = gdpPercap*pop)
+
+
+#divide gdpPercap by 10. Save it into a new variable called gdp_10
+mutate2 <- mutate(gm, gdp_10 = gdpPercap/10)
+
+
+
+```
+
+
+
+# arrange() the dataset
+
+You can use arrange() to sort a dataframe
+
+```{r}
+#sort the dataframe by year
+arrange1 <- arrange(gm, year)
+
+#Sort two by two variables (year then lifeExp)
+arrange2 <- arrange(gm, year, lifeExp)
+
+#Sort in descending order
+arrange3 <- arrange(gm, desc(year))
+
+#combine it all
+arrange4 <- arrange(gm, year, desc(lifeExp))
+
+```
+
+
+# summarize() the dataset
+
+you can summarize the dataset in certain ways. 
+
+## Get the mean of the lifeExp variable.
+```{r}
+
+
+summarize(gm, avg_lifeExp = mean(lifeExp, na.rm = TRUE))
+
+```
+
+## Get the mean of lifeExp, grouped by year
+```{r}
+
+#First group your variable by year
+gm_by_year <- group_by(gm, year)
+
+#Optional: Check the grouping structure of the dataframe
+#group_vars(gm_by_year)
+
+#Summarize the variable
+summarize(gm_by_year, avg_lifeExp = mean(lifeExp, na.rm = TRUE), .groups = "drop")
+
+
+#Summarize multiple aspects by year
+gm_by_year <- group_by(gm, year)
+summarize(gm_by_year, 
+          avg_lifeExp = mean(lifeExp), 
+          sd_lifeExp = sd(lifeExp), 
+          ncount = n(), .groups = "drop")
+
+#Ungroup the dataset 
+gm_by_year <- ungroup(gm_by_year)
+#group_vars(gm_by_year)
+
+
+
+```
+
+# Using the "Pipe" operator (%>%)
+You can use pipes to combine any of these functions (i.e. filter(), select()) together and make your code more readable. 
+
+# Let's filter() & select()
+```{r}
+indo <- gm %>%
+  filter(country == "Indonesia") %>%
+  select(year, lifeExp, country)
+```
+
+
+## A bit more complex... filter(), select(), group_by, & summarize()
+```{r}
+gm %>%
+  filter(continent != "Oceania") %>%
+  select(year, continent, country, lifeExp) %>%
+  group_by(continent, year) %>%
+  summarize(avg_lifeExp = mean(lifeExp), 
+            sd_lifeExp = sd(lifeExp), 
+            ncount = n(), 
+            .groups = "drop")
+```
+
+
+
+# Visualizing data with ggplot()
+## There are 3 essential components to ggplot
+
+1.) The dataset  
+2.) Your aesthetics function (aes())  
+3.) your geom_ layer(s)  
+
+# Create a histogram
+```{r}
+ggplot(gm, aes(x = lifeExp)) +
+  geom_histogram(fill = "dark green")
+```
+
+
+
+## Add a title to my histogram via labs() layer
+```{r}
+ggplot(gm, aes(x = lifeExp)) + 
+  geom_histogram(fill = "dark green") +
+  labs(title = "This is my title", subtitle = "This is my subtitle")
+```
+
+# Create a scatterplot
+## A simple one
+```{r}
+ggplot(gm, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+
+## A more complex one
+```{r}
+ggplot(gm, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ continent) +
+  scale_x_log10() +
+  labs(title = "This is the title of my chart", 
+       subtitle = "Here is my subtitle")
+```
+
+
+
+# Create a bar chart
+```{r}
+ggplot(gm, aes(x = continent, fill = continent)) + 
+  geom_bar() + 
+  labs(title = "How many data points do we have for each continent?", subtitle = "That's pretty neat!")
+```
+
+```{r}
+ls(pattern = '^geom_', env = as.environment('package:ggplot2'))
+
+ggplot2:::.all_aesthetics
+```
+
+
+

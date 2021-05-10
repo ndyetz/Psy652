@@ -1,0 +1,58 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+# clear environment
+rm(list = ls())
+
+library(tidyverse)
+library(psych)
+
+
+# read in data
+slp <- read_csv("slpdata.csv")
+
+# describe data
+describe(slp)
+
+
+slp <- slp %>% 
+  mutate(
+     sleep_cat = ifelse(sleep < mean(sleep) , "Bad_sleep", ""),
+     sleep_cat = ifelse(sleep >= mean(sleep), "Good_sleep", sleep_cat),
+     
+     sex = ifelse(sex == 1, "Male", "Female"),
+     
+     
+     prior = ifelse(prior == 0, "No_int", "Prev_int"),
+     
+     cond2 = ifelse(cond == 1, "cond_1", ""),
+     cond2 = ifelse(cond == 2, "cond_2", cond2), 
+     cond2 = ifelse(cond == 3, "cond_3", cond2))
+
+
+
+```
+
+# select data
+```{r}
+slp_reduced <- select(slp, id, sex, cond = "cond2", prior, sleep = "sleep_cat")
+describe(slp_reduced)
+```
+
+# Write_csv()
+```{r}
+
+write_csv(slp_reduced, "slp_cat.csv", na = "")
+
+```
+
+
+
+
+
+
+
+

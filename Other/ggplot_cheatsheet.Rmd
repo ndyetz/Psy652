@@ -1,0 +1,285 @@
+---
+title: "ggplot Cheatsheet"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    toc_float: yes
+    number_sections: yes
+    df_print: paged
+    theme: simplex
+    fontsize: 14
+  html_notebook:
+    toc: yes
+    toc_float: yes
+    toc_depth: 4
+    number_sections: yes
+---
+
+<style type="text/css">
+  body{
+  font-size: 12pt;
+}
+</style>
+
+<center>
+![](https://www.libraries.rutgers.edu/sites/default/files/styles/resize_to_300px_width/public/events/2019/09/ggplot2.png)
+</center>
+
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+rm(list = ls())
+
+library(tidyverse)
+
+yourdata <- read_csv("gapminder.csv")
+yourData <- read_csv("iris.csv")
+
+yourdata <- yourdata %>% 
+  rename(variable4 = "country",
+         categorical_variable = "continent",
+         variable3 = "year",
+         variable1 = "lifeExp",
+         variable5 = "pop",
+         variable2 = "gdpPercap")
+
+yourData <- yourData %>% 
+  rename(variable1 = "Sepal.Length",
+         variable2 = "Sepal.Width")
+
+```
+
+
+
+# Introduction
+
+The purpose of this document is to provide some helpful information on using ggplot(). This document was created by Neil Yetz on 10/08/2020. In this document I talk about the essential concepts regarding the ggplot() function. I then provide standardized code for creating wonderful ggplot() graphs. 
+
+
+## The Basics of ggplot()
+
+ggplot requires three essential components to run:
+
+-  1.) ***Data***: Provided as your first argument (or using "data =")  
+-  2.) An ***aesthetic***: Abbreviated *aes()*, This is where you can "map" your x and/or y variables as well as many other variables.  
+-  3.) a ***geom_*** layer: A geom_ layer takes on many forms. For example if you want to create a boxplot, the geom_ layer is "geom_boxplot()". Want to create a histogram? "geom_histogram()". Correlation? "geom_point()". You can add layers by using a "+" sign. 
+
+Below is the most basic ggplot() graph. 
+```
+ggplot(data, aes(x = variable)) +
+  geom_layer()
+```
+
+
+# Popular geom_layers
+In this section, I write the most basic syntax for some of the more popular geom_layers that you will likely be utilizing throughout your career. 
+
+## geom_histogram()
+geom_histogram is a univariate layer (It only requires an x axis to be mapped in your aes() ).
+
+For example: 
+
+
+```{r}
+ggplot(yourdata, aes(x = variable1)) +
+  geom_histogram() 
+```
+
+
+### Special features with geom_histogram()
+#### Setting binwidth
+You can change the binwidth of a histogram by using the "binwidth =" argument in your geom_histogram layer. For example: 
+```{r}
+ggplot(yourdata, aes(x = variable1)) +
+  geom_histogram(binwidth = 0.5) 
+```
+
+## geom_density()
+geom_density is a univariate layer (It only requires an x axis to be mapped in your aes() ).It is very similar to geom_histogram, but the y-axis is a proportion, rather than a count
+
+For example: 
+
+```{r}
+ggplot(yourdata, aes(x = variable1)) +
+  geom_density() 
+```
+
+
+## geom_boxplot()
+geom_boxplot is a univariate layer (It only requires an x or y axis to be mapped in your aes() )
+
+For example: 
+
+```{r}
+ggplot(yourdata, aes(x = variable1)) +
+  geom_boxplot() 
+```
+
+geom_boxplot() also allows you to map a single y-axis if you'd like your boxplot to be vertical. For example
+
+```{r}
+ggplot(yourdata, aes(y = variable1)) +
+  geom_boxplot() 
+```
+
+## geom_bar()
+geom_bar creates a bar plot and is a univariate layer (It only requires an x or y axis to be mapped in your aes() ). Additionally, your x variable need to be categorical. For example:
+
+```{r}
+
+ggplot(yourdata, aes(x = categorical_variable)) +
+  geom_bar()
+
+```
+
+
+geom_bar() also allows you to map a single y-axis if you'd like your barplot to be flipped. For example
+
+```{r}
+
+ggplot(yourdata, aes(y = categorical_variable)) +
+  geom_bar()
+
+```
+
+
+
+
+## geom_point()
+geom_point creates a scatterplot and is a bivariate layer (It requires an x AND a y axis in the aes() ). Both variable need to be continuous. For example:
+
+
+```{r}
+
+ggplot(yourData, aes(x = variable1, y = variable2)) +
+  geom_point()
+
+```
+
+
+
+## geom_smooth()
+
+geom_smooth creates a regression line and is a bivariate layer (It requires an x AND a y axis in the aes() ). Both variable need to be continuous. For example:
+```{r}
+ggplot(yourData, aes(x = variable1, y = variable2)) +
+  geom_smooth()
+```
+
+
+### Special features with geom_smooth()
+#### Adding best fit linear line
+You can set the best fir linear line using " method = "lm" " 
+```{r}
+ggplot(yourData, aes(x = variable1, y = variable2)) +
+  geom_smooth(method = "lm")
+```
+
+
+## geom point() + geom_smooth()
+Often times, it is appropriate to combine our geom_point() and geom_smooth() layer. This overlays a regression line on top of your scatterplot. For example:
+```{r}
+ggplot(yourData, aes(x = variable1, y = variable2)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+# Other popular layers
+In this section, I outline other useful layers beond that of popular geom_layers. 
+
+## facet_wrap()
+The facet_wrap() layer allows you to separate graphs out by a categorical variable. To indicate the variable we would like to facet by, we use a "~" within the facet_wrap() layer. 
+
+In general, it looks as so: 
+```
+facet_wrap(~categorical_variable)
+```
+
+For example, when combined with other geom_boxplot:
+```{r}
+ggplot(yourdata, aes(x = variable1)) +
+  geom_boxplot() +
+  facet_wrap(~categorical_variable)
+```
+
+or with a geom_scatterplot:
+
+```{r}
+ggplot(yourdata, aes(x = variable2, y = variable1)) +
+  geom_point() +
+  facet_wrap(~categorical_variable)
+```
+
+
+## labs()
+The labs() layer allows you to add labels to your plot. You can add:
+
+-   A title (title = )
+-   A subtitle (subtitle = )
+-   An x-axis label (x = )
+-   A y-axis label (y = )
+
+For example:
+```{r}
+
+ggplot(yourData, aes(x = variable1, y = variable2)) +
+  geom_point() +
+  labs(title = "This is my title", 
+       subtitle = "This is my subtitle", 
+       x = "x axis name", 
+       y = "y-axis name")
+```
+
+
+# Popular aesthetics
+Aesthetics have many more features beyond mapping your x and y variables to your geom_ layer. You can also color by variable levels. You can fill by a categorical variable or a continuous variable.  
+
+## fill = 
+Use fill = within your aes() in order to color by a variable level.
+
+For example, filling by a categorical variable:
+
+```{r}
+ggplot(yourdata, aes(x = categorical_variable, fill = categorical_variable)) +
+  geom_bar()
+```
+
+
+## color = 
+
+use "color =" within your aes() function to color your scatterplots by variable
+
+```{r}
+
+ggplot(yourdata, aes(x = variable2, y = variable1, color = categorical_variable)) +
+  geom_point() 
+```
+
+
+## shape =
+use "shape =" within your aes() function to have adifferent shapes mapped to your scatterplots by variable
+
+```{r}
+ggplot(yourdata, aes(x = variable2, y = variable1, shape = categorical_variable)) +
+  geom_point() 
+```
+
+
+# Put it together! 
+
+You can Have multiple layers and/or aesthetics into one graph!
+
+
+```{r}
+ggplot(yourdata, aes(x = variable2, y = variable1, color = categorical_variable, shape = categorical_variable)) +
+  geom_point() +
+  facet_wrap(~categorical_variable) +
+  labs(title = "This is your title",
+       subtitle = "This is your subtitle",
+       x = "This is your x-axis",
+       y = "This is your y-axis")
+```
+
+
+
+

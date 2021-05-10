@@ -1,0 +1,80 @@
+---
+title: "Multiple regression"
+output: html_notebook
+---
+
+# Load libraries 
+```{r}
+library(psych)
+library(olsrr)
+library(tidyverse)
+```
+
+# Read in data
+```{r}
+slp <- read_csv("slpdata.csv")
+```
+
+
+# Select variables of interest
+```{r}
+slp_reduced <- select(slp, hygiene, sleep, lifesat, anxiety)
+```
+
+
+
+# describe data
+```{r}
+describe(slp_reduced)
+```
+
+
+
+# Correlate variables
+```{r}
+
+cor(slp_reduced)
+
+```
+
+
+# Multiple regression models
+## lifesat ~ sleep + hygiene
+```{r}
+mod1 <- lm(lifesat ~ sleep + hygiene, data = slp_reduced)
+```
+
+### Via summary()
+```{r}
+summary(mod1)
+```
+
+
+### Via ols_regress
+```{r}
+ols_regress(mod1)
+
+```
+
+
+## lifesat ~ sleep + hygiene + anxiety
+```{r}
+mod2 <- lm(lifesat ~ sleep + hygiene + anxiety, data = slp_reduced)
+```
+
+###via summary()
+```{r}
+summary(mod2)
+```
+
+
+```{r}
+
+
+ols_regress(mod2)
+
+```
+
+
+
+
